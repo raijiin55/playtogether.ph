@@ -112,12 +112,16 @@
     opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity .18s ease, transform .18s ease;
   }
   .lang-dropdown.open .lang-dropdown-menu{opacity:1;pointer-events:auto;transform:translateY(0);}
+  @media(max-width:600px){
+    .lang-dropdown-menu{left:0;right:auto;}
+  }
   .lang-option{
     display:flex;align-items:center;gap:8px;width:100%;text-align:left;
     font-family:'Nunito',sans-serif;font-weight:700;font-size:13.5px;color:var(--plum);
     background:none;border:none;cursor:pointer;padding:9px 12px;border-radius:11px;transition:background .15s ease;
   }
   .lang-option:hover{background:var(--mint);}
+  .flag-icon{width:18px;height:13px;border-radius:2px;flex-shrink:0;box-shadow:0 0 0 1px rgba(0,0,0,.08);display:block;}
   .lang-option.active{background:var(--plum);color:#fff;}
 
   .tab-section{display:none;}
@@ -655,16 +659,37 @@
     <div style="display:flex;align-items:center;gap:10px;">
       <div class="lang-dropdown" id="langDropdown">
         <button class="lang-dropdown-trigger" onclick="toggleLangDropdown()" aria-haspopup="listbox" aria-expanded="false" id="langDropdownTrigger">
-          <span id="langDropdownLabel">🇬🇧 EN</span>
+          <span id="langDropdownLabel" style="display:flex;align-items:center;gap:6px;">
+            <svg class="flag-icon" viewBox="0 0 30 20" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#00247d"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="4"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#cf142b" stroke-width="2"/><path d="M15,0 V20 M0,10 H30" stroke="#fff" stroke-width="7"/><path d="M15,0 V20 M0,10 H30" stroke="#cf142b" stroke-width="4"/></svg>
+            <span>EN</span>
+          </span>
           <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <div class="lang-dropdown-menu" role="listbox">
-          <button class="lang-option active" data-lang="en" onclick="setLang('en')">🇬🇧 English</button>
-          <button class="lang-option" data-lang="vi" onclick="setLang('vi')">🇻🇳 Tiếng Việt</button>
-          <button class="lang-option" data-lang="th" onclick="setLang('th')">🇹🇭 ไทย</button>
-          <button class="lang-option" data-lang="ja" onclick="setLang('ja')">🇯🇵 日本語</button>
-          <button class="lang-option" data-lang="zh" onclick="setLang('zh')">🇨🇳 中文</button>
-          <button class="lang-option" data-lang="ko" onclick="setLang('ko')">🇰🇷 한국어</button>
+          <button class="lang-option active" data-lang="en" onclick="setLang('en')">
+            <svg class="flag-icon" viewBox="0 0 30 20" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#00247d"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="4"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#cf142b" stroke-width="2"/><path d="M15,0 V20 M0,10 H30" stroke="#fff" stroke-width="7"/><path d="M15,0 V20 M0,10 H30" stroke="#cf142b" stroke-width="4"/></svg>
+            English
+          </button>
+          <button class="lang-option" data-lang="vi" onclick="setLang('vi')">
+            <svg class="flag-icon" viewBox="0 0 30 20" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#da251d"/><polygon points="15,4 16.76,9.53 22.57,9.53 17.9,12.94 19.66,18.47 15,15.06 10.34,18.47 12.1,12.94 7.43,9.53 13.24,9.53" fill="#ff0"/></svg>
+            Tiếng Việt
+          </button>
+          <button class="lang-option" data-lang="th" onclick="setLang('th')">
+            <svg class="flag-icon" viewBox="0 0 30 20" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#a51931"/><rect y="3.33" width="30" height="13.34" fill="#f4f5f8"/><rect y="6.67" width="30" height="6.67" fill="#2d2a4a"/></svg>
+            ไทย
+          </button>
+          <button class="lang-option" data-lang="ja" onclick="setLang('ja')">
+            <svg class="flag-icon" viewBox="0 0 30 20" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="6" fill="#bc002d"/></svg>
+            日本語
+          </button>
+          <button class="lang-option" data-lang="zh" onclick="setLang('zh')">
+            <svg class="flag-icon" viewBox="0 0 30 20" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#de2910"/><polygon points="6,3 6.9,5.7 9.7,5.7 7.4,7.3 8.3,10 6,8.3 3.7,10 4.6,7.3 2.3,5.7 5.1,5.7" fill="#ffde00"/><polygon points="10.5,3.5 10.9,4.3 11.8,4.3 11.1,4.8 11.3,5.6 10.5,5.1 9.8,5.6 10,4.8 9.3,4.3 10.2,4.3" fill="#ffde00"/><polygon points="12,5.5 12.4,6.3 13.3,6.3 12.6,6.8 12.8,7.6 12,7.1 11.3,7.6 11.5,6.8 10.8,6.3 11.7,6.3" fill="#ffde00"/><polygon points="12,8.5 12.4,9.3 13.3,9.3 12.6,9.8 12.8,10.6 12,10.1 11.3,10.6 11.5,9.8 10.8,9.3 11.7,9.3" fill="#ffde00"/><polygon points="10.5,10.5 10.9,11.3 11.8,11.3 11.1,11.8 11.3,12.6 10.5,12.1 9.8,12.6 10,11.8 9.3,11.3 10.2,11.3" fill="#ffde00"/></svg>
+            中文
+          </button>
+          <button class="lang-option" data-lang="ko" onclick="setLang('ko')">
+            <svg class="flag-icon" viewBox="0 0 30 20" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#fff"/><path d="M15,5 A5,5 0 0,1 15,15 A2.5,2.5 0 0,1 15,10 A2.5,2.5 0 0,0 15,5 Z" fill="#c60c30"/><path d="M15,5 A5,5 0 0,0 15,15 A2.5,2.5 0 0,0 15,10 A2.5,2.5 0 0,1 15,5 Z" fill="#003478"/></svg>
+            한국어
+          </button>
         </div>
       </div>
       <button class="contact-btn" onclick="openContact()" data-i18n="nav-contact">Contact me</button>
@@ -1384,38 +1409,38 @@
       'stat-combined':'Combined pets','stat-total-pets':'Total pets','stat-vip-bears':'VIP bears','stat-total-fishes':'Total fishes','stat-years':'Years playing','stat-total-insects':'Total insects',
       'milestone-heading':'My Milestone','milestone-sub':'The road to #1 — replace each thumbnail with a real screenshot when ready',
       'rank1-name':'Caught My First Blue Whale','rank1-note':'A memorable milestone that marked my biggest fishing achievements.',
-      'rank2-name':'Purchased My Dream Car – Rolls-Royce','rank2-note':'Achieved this personal goal on November 01, 2022',
+      'rank2-name':'Purchased My Dream Car – Rolls-Royce','rank2-note':'Achieved this persnal goal on November 01, 2022',
       'rank3-name':'Reached 4,000 Points & Earned the Purple Badge','rank3-note':'Achieved by playing zombie virus frequently to get crowned coins',
       'rank4-name':'Reached Level 26 – First Player in Asia','rank4-note':'Completed the newly released Level 26 within 24 hours, becoming the first player in Asia to achieve this milestone.',
       'rank5-name':'Defending the #1 Rank in Asia (2021 – Present)','rank5-note':'Maintained the top position in Asia through consistent performance and commitment since 2021.','rank5-tag':"You're here",
       'video-heading':'4,000 Badge Celebration','video-sub':'Replace the file below with your own celebration clip','video-caption':'Hitting 4,000 points & earning the Purple Badge 🏆',
       'derby-home-heading':'My Derby Plaques','derby-home-sub':'Best derby moment — swap in your screenshot',
       'trophy-name':'Derby champion moment','trophy-meta':'Add the placement, date, and horse name here',
-      'zombie-heading':'My Zombie Virus journey','zombie-sub':'A timeline of milestones behind my #1 Zombie Rank in Asia.',
+      'zombie-heading':'My Zombie Virus journey','zombie-sub':'A timeline of milestones behind my #1 Zombie Rank in Asia',
       'tl2021':'Began my Play Together journey and quickly rose to the top, earning the Top1 Zombie Rank - Oct 29, 2021',
       'tl2022':"Closed the year with 19,000 Zombie Wins, strengthening my position as Asia's Top1 player",
       'tl2023':'Continued dominating the rankings by reaching 26,000 Zombie Wins while defending the #1 spot',
-      'tl2024':'Earned 28,000 Zombie Wins while holding the Philippine flag during the viral "Piliin Mo ang Pilipinas" trend',
-      'tl2025':'Kept climbing until I reached 29,000 Wins before the year ended',
-      'tl2026':'Reached 30,000 Zombie Wins on the Asia server — currently defending the Rank 1 spot. Retirement is near',
+      'tl2024':'Earned 28,000 Zombie Wins while holding Philippine Flag with the viral song "Piliin Mo ang Pilipinas" trend',
+      'tl2025':'Kept climbing until i reached 29,000 Wins before year ends',
+      'tl2026':'Reached 30,000 Wins Zombie on the Asia server — currently defending the Rank 1 spot. Retirement is near',
       'footer-disclaimer':'Fan-made stats page for Play Together by Haegin — not affiliated with or endorsed by Haegin.',
       'footer-edit-note':'Edit the numbers, images, and timeline text in this file to keep it up to date.','footer-copyright':'© 2026 Raijin. All rights reserved.',
       'footer-brand-text':'A Play Together player card for Raijin — tracking pets, ranks, and milestones on the Asia server since 2021.',
-      'footer-quicklinks':'Quick links','footer-follow':'Follow along','footer-getapp':'Get the app',
+      'footer-quicklinks':'Quick links','footer-follow':'Follow me here','footer-getapp':'Get the app',
       'derby-heading':'Derby','derby-sub':'My derby wins and best runs',
       'collection-heading':'Collection','collection-sub':"Everything I've collected on the KAIA island so far",
-      'pets-heading':'Pets','pets-sub':'956 total, 167 combined ',
-      'fishes-heading':'Fishes','fishes-sub':'',
-      'cars-heading':'Cars','cars-sub':'Garage lineup — screenshots coming soon',
-      'vip-heading':'VIP bears','vip-sub':'Screenshots coming soon',
+      'pets-heading':'Pets','pets-sub':'956 total, 167 combined',
+      'fishes-heading':'Fishes','fishes-sub':'My Greatest catch',
+      'cars-heading':'Vehicles','cars-sub':'Garage lineup',
+      'vip-heading':'VIP bears','vip-sub':'Play Pass Bear Collection',
       'activities-heading':'Activities','activities-sub':'Drawing and cosplay — the creative side of things',
       'about-since':'Playing since Feb 2021','about-status':'Active Player','about-heading':"Hey, I'm Raijin",
-      'about-text':'Island builder, pet collector, and reigning #1 zombie on the Asia server. This page tracks my Play Together progress — screenshots going up soon.',
+      'about-text':'Pet Merge collector and Top 1 zombie on Asia server. This page tracks my Play Together progress',
       'about-download-btn':'Download Play Together',
-      'news-heading':'News & Updates','news-sub':'The latest from my island — edit these anytime',
-      'news6-mon':'Aug','news6-title':'Completed the full card collection — 120/120!','news6-text':'Filled the very last slot in my collection card, hitting a perfect 120 out of 120.',
-      'news7-mon':'Aug','news7-title':'Combined a new Turtle pet','news7-text':'Bred a new Turtle pet by combining two pets in the nursery.',
-      'news8-mon':'Aug','news8-title':'Combined a new White Tiger pet','news8-text':'Bred a new White Tiger pet — added to the collection this week.',
+      'news-heading':'News & Updates','news-sub':'My latest news',
+      'news6-mon':'Aug','news6-title':'Completed all 120/120 cards','news6-text':'Earned the AURORAPING Wings and advanced to the next level of the card event.',
+      'news7-mon':'Aug','news7-title':'Combined a Black Tortoise','news7-text':'Successfully combined a new event pet and proudly added it to my home',
+      'news8-mon':'Aug','news8-title':'Combined a new White Tiger pet','news8-text':'Successfully combined a new event pet and proudly added it to my home',
       'news1-mon':'Jul','news1-title':'Got the Princess Darkness Wings in just 1 draw','news1-text':'Pulled the Princess Darkness Wings outfit on the very first try — an incredibly lucky single draw.',
       'news2-mon':'Jul','news2-title':'Caught the Beluga Sturgeon Aurora','news2-text':'Reeled in a rare Beluga Sturgeon Aurora while fishing — one of the rarest catches yet.',
       'news3-mon':'Jul','news3-title':'Done the Princess Heart event','news3-text':'Completed all stages of the Princess Heart event and claimed the rewards.',
@@ -1540,7 +1565,11 @@
     document.querySelectorAll('.lang-option').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
     const chosen = document.querySelector('.lang-option[data-lang="' + lang + '"]');
     const label = document.getElementById('langDropdownLabel');
-    if (chosen && label) label.textContent = chosen.textContent;
+    const codeMap = {en:'EN',vi:'VI',th:'TH',ja:'JA',zh:'ZH',ko:'KO'};
+    if (chosen && label) {
+      const flag = chosen.querySelector('.flag-icon');
+      label.innerHTML = (flag ? flag.outerHTML : '') + '<span>' + (codeMap[lang] || lang.toUpperCase()) + '</span>';
+    }
     document.documentElement.lang = lang;
     closeLangDropdown();
   }
