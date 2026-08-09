@@ -95,11 +95,30 @@
   .contact-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(255,140,122,.5);}
   .contact-btn:hover{transform:translateY(-2px);}
 
-  /* ---------- LANGUAGE SWITCHER ---------- */
-  .lang-switch{display:flex;align-items:center;gap:2px;background:var(--mint);border-radius:999px;padding:3px;flex-shrink:0;}
-  .lang-btn{font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;letter-spacing:.02em;color:var(--mint-deep);background:none;border:none;cursor:pointer;padding:6px 11px;border-radius:999px;transition:all .2s ease;}
-  .lang-btn:hover{background:rgba(255,255,255,.5);}
-  .lang-btn.active{background:var(--plum);color:#fff;}
+  /* ---------- LANGUAGE SWITCHER (dropdown) ---------- */
+  .lang-dropdown{position:relative;flex-shrink:0;}
+  .lang-dropdown-trigger{
+    display:flex;align-items:center;gap:6px;font-family:'Nunito',sans-serif;font-weight:800;font-size:12.5px;
+    letter-spacing:.02em;color:var(--mint-deep);background:var(--mint);border:none;cursor:pointer;
+    padding:8px 12px;border-radius:999px;transition:background .2s ease;
+  }
+  .lang-dropdown-trigger:hover{background:#bdeed7;}
+  .lang-dropdown-trigger svg{width:13px;height:13px;transition:transform .2s ease;}
+  .lang-dropdown.open .lang-dropdown-trigger svg{transform:rotate(180deg);}
+  .lang-dropdown-menu{
+    position:absolute;top:calc(100% + 8px);right:0;min-width:160px;background:var(--card);
+    border-radius:16px;padding:6px;box-shadow:0 14px 32px rgba(46,36,64,.18);
+    display:flex;flex-direction:column;gap:2px;z-index:30;
+    opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity .18s ease, transform .18s ease;
+  }
+  .lang-dropdown.open .lang-dropdown-menu{opacity:1;pointer-events:auto;transform:translateY(0);}
+  .lang-option{
+    display:flex;align-items:center;gap:8px;width:100%;text-align:left;
+    font-family:'Nunito',sans-serif;font-weight:700;font-size:13.5px;color:var(--plum);
+    background:none;border:none;cursor:pointer;padding:9px 12px;border-radius:11px;transition:background .15s ease;
+  }
+  .lang-option:hover{background:var(--mint);}
+  .lang-option.active{background:var(--plum);color:#fff;}
 
   .tab-section{display:none;}
   .tab-section.active{display:block;animation:fadeIn .4s ease;}
@@ -281,6 +300,7 @@
   .gallery-card:hover{transform:translateY(-5px);box-shadow:0 16px 32px rgba(46,36,64,.16);}
   .gallery-thumb{position:relative;aspect-ratio:4/3;flex-shrink:0;background:#FAF7F2;border-bottom:2px dashed rgba(46,36,64,.12);overflow:hidden;}
   .gallery-thumb img{width:100%;height:100%;object-fit:cover;object-position:center;display:none;}
+  .gallery-thumb.full-photo img{object-fit:contain;}
   .gallery-fallback{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--muted);}
   .gallery-thumb svg{width:28px;height:28px;}
   .gallery-thumb span{font-size:11px;font-weight:800;}
@@ -633,10 +653,19 @@
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;">
-      <div class="lang-switch" role="group" aria-label="Language">
-        <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
-        <button class="lang-btn" data-lang="vi" onclick="setLang('vi')">VN</button>
-        <button class="lang-btn" data-lang="th" onclick="setLang('th')">TH</button>
+      <div class="lang-dropdown" id="langDropdown">
+        <button class="lang-dropdown-trigger" onclick="toggleLangDropdown()" aria-haspopup="listbox" aria-expanded="false" id="langDropdownTrigger">
+          <span id="langDropdownLabel">🇬🇧 EN</span>
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="lang-dropdown-menu" role="listbox">
+          <button class="lang-option active" data-lang="en" onclick="setLang('en')">🇬🇧 English</button>
+          <button class="lang-option" data-lang="vi" onclick="setLang('vi')">🇻🇳 Tiếng Việt</button>
+          <button class="lang-option" data-lang="th" onclick="setLang('th')">🇹🇭 ไทย</button>
+          <button class="lang-option" data-lang="ja" onclick="setLang('ja')">🇯🇵 日本語</button>
+          <button class="lang-option" data-lang="zh" onclick="setLang('zh')">🇨🇳 中文</button>
+          <button class="lang-option" data-lang="ko" onclick="setLang('ko')">🇰🇷 한국어</button>
+        </div>
       </div>
       <button class="contact-btn" onclick="openContact()" data-i18n="nav-contact">Contact me</button>
     </div>
@@ -922,17 +951,17 @@
     <h3 class="subsection-heading"><span class="dot-tag" style="background:var(--coral-deep);"></span><span data-i18n="pets-heading">Pets</span></h3>
     <p class="subsection-sub" data-i18n="pets-sub">956 total, 167 combined</p>
     <div class="gallery-grid">
-      <div class="gallery-card"><div class="gallery-thumb"><img src="pet-1.jpg" alt="Pet #1" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Pet #1</div><div class="meta">Add name + rarity</div></div></div>
-      <div class="gallery-card"><div class="gallery-thumb"><img src="pet-2.jpg" alt="Pet #2" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Pet #2</div><div class="meta">Add name + rarity</div></div></div>
-      <div class="gallery-card"><div class="gallery-thumb"><img src="pet-3.jpg" alt="Pet #3" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Pet #3</div><div class="meta">Add name + rarity</div></div></div>
+      <div class="gallery-card"><div class="gallery-thumb full-photo"><img src="pet-1.jpg" alt="Pet #1" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Pet #1</div><div class="meta">Add name + rarity</div></div></div>
+      <div class="gallery-card"><div class="gallery-thumb full-photo"><img src="pet-2.jpg" alt="Pet #2" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Pet #2</div><div class="meta">Add name + rarity</div></div></div>
+      <div class="gallery-card"><div class="gallery-thumb full-photo"><img src="pet-3.jpg" alt="Pet #3" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Pet #3</div><div class="meta">Add name + rarity</div></div></div>
     </div>
 
     <h3 class="subsection-heading"><span class="dot-tag" style="background:var(--sun-deep);"></span><span data-i18n="fishes-heading">Fishes</span></h3>
     <p class="subsection-sub" data-i18n="fishes-sub">My Greatest catch</p>
     <div class="gallery-grid">
-      <div class="gallery-card"><div class="gallery-thumb"><img src="fish.jpg" alt="Fish #1" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Pink Megalodon</div><div class="meta">Ocean + VVIP</div></div></div>
-      <div class="gallery-card"><div class="gallery-thumb"><img src="bluewhale.jpg" alt="Fish #2" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Blue Whale</div><div class="meta">Ocean + VVIP</div></div></div>
-      <div class="gallery-card"><div class="gallery-thumb"><img src="fish01.jpg" alt="Fish #3" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Beluga Sturgeon</div><div class="meta">Lake + VIP</div></div></div>
+      <div class="gallery-card"><div class="gallery-thumb full-photo"><img src="fish.jpg" alt="Fish #1" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Pink Megalodon</div><div class="meta">Ocean + VVIP</div></div></div>
+      <div class="gallery-card"><div class="gallery-thumb full-photo"><img src="bluewhale.jpg" alt="Fish #2" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Blue Whale</div><div class="meta">Ocean + VVIP</div></div></div>
+      <div class="gallery-card"><div class="gallery-thumb full-photo"><img src="fish01.jpg" alt="Fish #3" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Beluga Sturgeon</div><div class="meta">Lake + VIP</div></div></div>
     </div>
 
     <h3 class="subsection-heading"><span class="dot-tag" style="background:var(--sky-deep);"></span><span data-i18n="cars-heading">Cars</span></h3>
@@ -1490,6 +1519,15 @@
       'news3-mon':'ก.ค.','news3-title':'ทำอีเวนต์ Princess Heart สำเร็จ','news3-text':'ผ่านทุกด่านของอีเวนต์ Princess Heart และรับรางวัลเรียบร้อยแล้ว',
       'news5-mon':'มิ.ย.','news5-title':'ออกแบบเพจใหม่','news5-text':'เพิ่มแท็บข่าวสาร ตัวสลับภาษา และไทม์ไลน์ที่ลื่นไหลขึ้นเพื่อให้เพื่อนๆ ติดตามได้ง่ายขึ้น',
       'news-tag-milestone':'เหตุการณ์สำคัญ','news-tag-update':'อัปเดต','news-tag-derby':'ดาร์บี้','news-tag-gacha':'สุ่มไอเทม','news-tag-catch':'จับปลา','news-tag-event':'อีเวนต์','news-tag-merge':'ผสมพันธุ์'
+    },
+    ja: {
+      'nav-home':'ホーム','nav-about':'私について','nav-news':'ニュース','nav-derby':'ダービー','nav-collection':'コレクション','nav-activities':'アクティビティ','nav-drawing':'イラスト','nav-cosplay':'コスプレ','nav-contact':'お問い合わせ','nav-auto':'車','nav-marine':'船','nav-moto':'バイク','nav-aerial':'空中','hero-eyebrow':'Play Together • プレイヤーカード','hero-tag':'2021年2月から島でペットを集めています','profile-level-chip':'Lv. 26','profile-pill-server':'アジアサーバー','profile-pill-rank':'ゾンビランク #1','profile-pill-since':'2021年から','badge-title':'ゾンビランク #1 — アジアサーバー','badge-sub':'トップランカー','level-label':'レベル 26','level-xp':'レベル27まで 25 / 30 XP','stats-heading':'私のPlay Together統計','stats-sub':'毎週更新される数値','stat-combined':'合成ペット','stat-total-pets':'ペット総数','stat-vip-bears':'VIPベア','stat-total-fishes':'魚の総数','stat-years':'プレイ年数','stat-total-insects':'昆虫の総数','milestone-heading':'私のマイルストーン','milestone-sub':'#1への道 — 準備ができたら各サムネイルを実際のスクリーンショットに差し替えてください','rank1-name':'初めてシロナガスクジラを釣った','rank1-note':'私の最大の釣りの成果を記した忘れられないマイルストーン。','rank2-name':'夢の車を購入 – ロールスロイス','rank2-note':'2022年11月1日にこの個人目標を達成','rank3-name':'4,000ポイント到達＆パープルバッジを獲得','rank3-note':'ゾンビウイルスを頻繁にプレイしてクラウンコインを獲得することで達成','rank4-name':'レベル26到達 – アジア初のプレイヤー','rank4-note':'新しく公開されたレベル26を24時間以内にクリアし、アジアで初めてこのマイルストーンを達成したプレイヤーとなった。','rank5-name':'アジアランク#1を防衛中（2021年〜現在）','rank5-note':'2021年から一貫した実力とコミットメントでアジアのトップの座を維持。','rank5-tag':'現在地','video-heading':'4,000バッジ達成記念','video-sub':'下のファイルをあなた自身の記念クリップに差し替えてください','video-caption':'4,000ポイント達成＆パープルバッジ獲得 🏆','derby-home-heading':'私のダービー表彰','derby-home-sub':'ベストなダービーの瞬間 — スクリーンショットに差し替えてください','trophy-name':'ダービー優勝の瞬間','trophy-meta':'ここに順位、日付、馬の名前を追加してください','zombie-heading':'私のゾンビウイルスの軌跡','zombie-sub':'アジアでのゾンビランク#1を支えたマイルストーンのタイムライン。','tl2021':'Play Togetherを始め、すぐにトップに上り詰め、2021年10月29日にゾンビランク1位を獲得','tl2022':'ゾンビ勝利数19,000で年を締めくくり、アジア1位としての地位を強化','tl2023':'ゾンビ勝利数26,000に到達し、ランキングを支配し続け、1位を防衛','tl2024':'話題の「Piliin Mo ang Pilipinas」トレンド中にフィリピン国旗を掲げながらゾンビ勝利数28,000を達成','tl2025':'年末までに勝利数29,000に到達するまで上昇を続けた','tl2026':'アジアサーバーでゾンビ勝利数30,000に到達 — 現在1位の座を防衛中。引退が近い','footer-disclaimer':'Haegin制作のPlay Togetherに関するファン制作の統計ページです — Haeginとは提携・公認関係はありません。','footer-edit-note':'このファイル内の数値、画像、タイムラインのテキストを編集して最新の状態に保ってください。','footer-copyright':'© 2026 Raijin. All rights reserved.','footer-brand-text':'Raijinの Play Together プレイヤーカード — 2021年からアジアサーバーでのペット、ランク、マイルストーンを記録。','footer-quicklinks':'クイックリンク','footer-follow':'フォローする','footer-getapp':'アプリを入手','derby-heading':'ダービー','derby-sub':'私のダービー勝利とベストレース','collection-heading':'コレクション','collection-sub':'これまでにKAIA島で集めたすべて','pets-heading':'ペット','pets-sub':'合計956、合成167','fishes-heading':'魚','fishes-sub':'','cars-heading':'車','cars-sub':'ガレージのラインナップ — スクリーンショット近日公開','vip-heading':'VIPベア','vip-sub':'スクリーンショット近日公開','activities-heading':'アクティビティ','activities-sub':'イラストとコスプレ — クリエイティブな一面','about-since':'2021年2月からプレイ','about-status':'アクティブプレイヤー','about-heading':'こんにちは、Raijinです','about-text':'島の建築家、ペットコレクター、そしてアジアサーバー現ゾンビランク#1。このページではPlay Togetherの進捗を記録しています — スクリーンショットは近日公開予定です。','about-download-btn':'Play Togetherをダウンロード','news-heading':'ニュース＆アップデート','news-sub':'私の島からの最新情報 — いつでも編集できます','news6-mon':'8月','news6-title':'カードコレクションを完全制覇 — 120/120！','news6-text':'コレクションカードの最後の1枠を埋め、120分の120を達成。','news7-mon':'8月','news7-title':'新しいカメのペットを合成','news7-text':'育成施設で2匹のペットを合成し、新しいカメのペットを誕生させた。','news8-mon':'8月','news8-title':'新しいホワイトタイガーのペットを合成','news8-text':'新しいホワイトタイガーのペットを合成 — 今週コレクションに追加。','news1-mon':'7月','news1-title':'たった1回の抽選でプリンセスダークネスウィングスを獲得','news1-text':'最初の1回でプリンセスダークネスウィングスの衣装を引き当てた — 信じられないほどの幸運。','news2-mon':'7月','news2-title':'ベルーガチョウザメオーロラを釣った','news2-text':'釣りで珍しいベルーガチョウザメオーロラを釣り上げた — 最も希少な釣果の一つ。','news3-mon':'7月','news3-title':'プリンセスハートイベントを完了','news3-text':'プリンセスハートイベントの全ステージをクリアし、報酬を獲得。','news5-mon':'6月','news5-title':'ページをリデザイン','news5-text':'ニュースタブ、言語切り替え、よりスムーズなタイムラインを追加し、友達がフォローしやすくなった。','news-tag-milestone':'マイルストーン','news-tag-update':'アップデート','news-tag-derby':'ダービー','news-tag-gacha':'ガチャ','news-tag-catch':'釣果','news-tag-event':'イベント','news-tag-merge':'合成'
+    },
+    zh: {
+      'nav-home':'首页','nav-about':'关于我','nav-news':'新闻','nav-derby':'德比赛','nav-collection':'收藏','nav-activities':'活动','nav-drawing':'绘画','nav-cosplay':'角色扮演','nav-contact':'联系我','nav-auto':'汽车','nav-marine':'船只','nav-moto':'摩托车','nav-aerial':'飞行器','hero-eyebrow':'Play Together • 玩家卡片','hero-tag':'自2021年2月起在岛上收集宠物','profile-level-chip':'Lv. 26','profile-pill-server':'亚洲服务器','profile-pill-rank':'僵尸排名 #1','profile-pill-since':'自2021年起','badge-title':'僵尸排名 #1 — 亚洲服务器','badge-sub':'排名第一','level-label':'等级 26','level-xp':'距离27级还需 25 / 30 经验值','stats-heading':'我的Play Together数据','stats-sub':'数据每周更新','stat-combined':'合成宠物','stat-total-pets':'宠物总数','stat-vip-bears':'VIP熊','stat-total-fishes':'鱼类总数','stat-years':'游戏年数','stat-total-insects':'昆虫总数','milestone-heading':'我的里程碑','milestone-sub':'通往第一名之路 — 准备好后请将每个缩略图替换为真实截图','rank1-name':'第一次钓到蓝鲸','rank1-note':'一个纪念我最大钓鱼成就的难忘里程碑。','rank2-name':'购买了梦想座驾——劳斯莱斯','rank2-note':'于2022年11月1日实现这个个人目标','rank3-name':'达到4,000积分并获得紫色徽章','rank3-note':'通过频繁玩僵尸病毒来获得皇冠币而达成','rank4-name':'达到26级——亚洲首位玩家','rank4-note':'在24小时内完成了新发布的26级，成为亚洲首位达成此里程碑的玩家。','rank5-name':'守住亚洲第一名（2021年至今）','rank5-note':'自2021年以来凭借稳定的表现和坚持，一直保持亚洲第一的位置。','rank5-tag':'你在这里','video-heading':'4,000徽章庆祝','video-sub':'请将下方文件替换为你自己的庆祝视频','video-caption':'达到4,000积分并获得紫色徽章 🏆','derby-home-heading':'我的德比奖牌','derby-home-sub':'最佳德比时刻 — 换成你的截图','trophy-name':'德比冠军时刻','trophy-meta':'在此添加名次、日期和马匹名称','zombie-heading':'我的僵尸病毒之旅','zombie-sub':'我在亚洲获得僵尸排名第一背后的里程碑时间线。','tl2021':'开始了我的Play Together之旅，并迅速登顶，于2021年10月29日获得僵尸排名第一','tl2022':'以19,000次僵尸胜利结束这一年，巩固了我作为亚洲第一玩家的地位','tl2023':'继续统治排行榜，达到26,000次僵尸胜利，同时守住第一的位置','tl2024':'在热门话题「Piliin Mo ang Pilipinas」期间，一边举着菲律宾国旗一边达成28,000次僵尸胜利','tl2025':'持续攀升，在年底前达到29,000次胜利','tl2026':'在亚洲服务器达到30,000次僵尸胜利——目前正在守住第一名的位置，退役将至','footer-disclaimer':'这是由粉丝制作的Play Together（Haegin出品）数据页面——与Haegin无任何关联，也未获得其认可。','footer-edit-note':'编辑本文件中的数字、图片和时间线文字，使其保持最新。','footer-copyright':'© 2026 Raijin. 保留所有权利。','footer-brand-text':'Raijin的Play Together玩家卡片——记录自2021年以来在亚洲服务器上的宠物、排名和里程碑。','footer-quicklinks':'快速链接','footer-follow':'关注我','footer-getapp':'获取应用','derby-heading':'德比赛','derby-sub':'我的德比赛胜利和最佳战绩','collection-heading':'收藏','collection-sub':'我目前在KAIA岛上收集到的一切','pets-heading':'宠物','pets-sub':'共956只，其中167只为合成','fishes-heading':'鱼类','fishes-sub':'','cars-heading':'汽车','cars-sub':'车库阵容——截图即将上线','vip-heading':'VIP熊','vip-sub':'截图即将上线','activities-heading':'活动','activities-sub':'绘画与角色扮演——富有创意的一面','about-since':'自2021年2月起开始游玩','about-status':'活跃玩家','about-heading':'嗨，我是Raijin','about-text':'岛屿建造者、宠物收藏家，现任亚洲服务器僵尸排名第一。本页面记录我的Play Together进度——截图即将上线。','about-download-btn':'下载 Play Together','news-heading':'新闻与动态','news-sub':'来自我岛屿的最新消息——随时可编辑','news6-mon':'8月','news6-title':'完成完整卡片收藏——120/120！','news6-text':'填满了收藏卡片的最后一格，完美达成120分之120。','news7-mon':'8月','news7-title':'合成了一只新的乌龟宠物','news7-text':'在育儿所中合成两只宠物，培育出一只新的乌龟宠物。','news8-mon':'8月','news8-title':'合成了一只新的白虎宠物','news8-text':'合成了一只新的白虎宠物——本周加入收藏。','news1-mon':'7月','news1-title':'仅抽一次就获得公主暗黑之翼','news1-text':'第一次抽卡就抽到公主暗黑之翼套装——运气极佳的一次单抽。','news2-mon':'7月','news2-title':'钓到极光贝加尔鲟','news2-text':'钓鱼时钓到了罕见的极光贝加尔鲟——目前最稀有的渔获之一。','news3-mon':'7月','news3-title':'完成公主之心活动','news3-text':'完成了公主之心活动的所有关卡并领取了奖励。','news5-mon':'6月','news5-title':'页面重新设计','news5-text':'新增了新闻标签、语言切换器，以及更流畅的时间线，方便朋友们跟进动态。','news-tag-milestone':'里程碑','news-tag-update':'更新','news-tag-derby':'德比赛','news-tag-gacha':'抽卡','news-tag-catch':'渔获','news-tag-event':'活动','news-tag-merge':'合成'
+    },
+    ko: {
+      'nav-home':'홈','nav-about':'소개','nav-news':'뉴스','nav-derby':'더비','nav-collection':'컬렉션','nav-activities':'활동','nav-drawing':'그림','nav-cosplay':'코스프레','nav-contact':'문의하기','nav-auto':'자동차','nav-marine':'선박','nav-moto':'오토바이','nav-aerial':'항공','hero-eyebrow':'Play Together • 플레이어 카드','hero-tag':'2021년 2월부터 섬에서 펫을 모으고 있어요','profile-level-chip':'Lv. 26','profile-pill-server':'아시아 서버','profile-pill-rank':'좀비 랭킹 #1','profile-pill-since':'2021년부터','badge-title':'좀비 랭킹 #1 — 아시아 서버','badge-sub':'최상위 랭커','level-label':'레벨 26','level-xp':'27레벨까지 25 / 30 XP','stats-heading':'내 Play Together 통계','stats-sub':'매주 업데이트되는 수치','stat-combined':'합성 펫','stat-total-pets':'총 펫 수','stat-vip-bears':'VIP 곰','stat-total-fishes':'총 물고기 수','stat-years':'플레이 연차','stat-total-insects':'총 곤충 수','milestone-heading':'내 마일스톤','milestone-sub':'1위까지의 여정 — 준비되면 각 썸네일을 실제 스크린샷으로 교체하세요','rank1-name':'첫 흰긴수염고래를 낚음','rank1-note':'내 최고의 낚시 업적을 기록한 잊지 못할 순간.','rank2-name':'드림카 구매 – 롤스로이스','rank2-note':'2022년 11월 1일에 이 개인 목표를 달성','rank3-name':'4,000포인트 달성 및 퍼플 배지 획득','rank3-note':'좀비 바이러스를 자주 플레이해 크라운 코인을 얻어 달성','rank4-name':'26레벨 달성 – 아시아 최초 플레이어','rank4-note':'새로 출시된 26레벨을 24시간 이내에 완료하며 아시아에서 이 마일스톤을 최초로 달성한 플레이어가 됨.','rank5-name':'아시아 1위 방어 중(2021년~현재)','rank5-note':'2021년부터 꾸준한 실력과 노력으로 아시아 1위 자리를 유지.','rank5-tag':'현재 위치','video-heading':'4,000 배지 기념','video-sub':'아래 파일을 나만의 축하 영상으로 교체하세요','video-caption':'4,000포인트 달성 및 퍼플 배지 획득 🏆','derby-home-heading':'내 더비 트로피','derby-home-sub':'최고의 더비 순간 — 스크린샷으로 교체하세요','trophy-name':'더비 우승 순간','trophy-meta':'여기에 순위, 날짜, 말 이름을 추가하세요','zombie-heading':'나의 좀비 바이러스 여정','zombie-sub':'아시아 좀비 랭킹 1위를 만든 마일스톤 타임라인.','tl2021':'Play Together 여정을 시작해 빠르게 정상에 올라, 2021년 10월 29일 좀비 랭킹 1위 달성','tl2022':'좀비 승리 19,000회로 한 해를 마무리하며 아시아 1위 플레이어로서 입지를 다짐','tl2023':'좀비 승리 26,000회를 달성하며 계속해서 랭킹을 지배하고 1위 자리를 방어','tl2024':'화제가 된 "Piliin Mo ang Pilipinas" 트렌드 기간 동안 필리핀 국기를 들고 좀비 승리 28,000회 달성','tl2025':'연말까지 승리 29,000회에 도달할 때까지 계속 상승','tl2026':'아시아 서버에서 좀비 승리 30,000회 달성 — 현재 1위 자리를 방어 중이며 은퇴가 가까워짐','footer-disclaimer':'Haegin의 Play Together에 대한 팬 제작 통계 페이지입니다 — Haegin과 제휴하거나 승인받지 않았습니다.','footer-edit-note':'최신 상태를 유지하려면 이 파일의 숫자, 이미지, 타임라인 텍스트를 편집하세요.','footer-copyright':'© 2026 Raijin. All rights reserved.','footer-brand-text':'Raijin의 Play Together 플레이어 카드 — 2021년부터 아시아 서버에서의 펫, 랭킹, 마일스톤을 기록합니다.','footer-quicklinks':'바로가기','footer-follow':'팔로우하기','footer-getapp':'앱 다운로드','derby-heading':'더비','derby-sub':'내 더비 우승 및 최고 기록','collection-heading':'컬렉션','collection-sub':'지금까지 KAIA 섬에서 모은 모든 것','pets-heading':'펫','pets-sub':'총 956마리, 합성 167마리','fishes-heading':'물고기','fishes-sub':'','cars-heading':'자동차','cars-sub':'차고 라인업 — 스크린샷 곧 공개','vip-heading':'VIP 곰','vip-sub':'스크린샷 곧 공개','activities-heading':'활동','activities-sub':'그림과 코스프레 — 창의적인 면','about-since':'2021년 2월부터 플레이 중','about-status':'활동 중인 플레이어','about-heading':'안녕하세요, 저는 Raijin입니다','about-text':'섬 건축가, 펫 수집가, 그리고 아시아 서버 현 좀비 랭킹 1위. 이 페이지는 제 Play Together 진행 상황을 기록합니다 — 스크린샷은 곧 업데이트될 예정입니다.','about-download-btn':'Play Together 다운로드','news-heading':'뉴스 및 업데이트','news-sub':'제 섬의 최신 소식 — 언제든 수정 가능합니다','news6-mon':'8월','news6-title':'카드 컬렉션 완성 — 120/120!','news6-text':'컬렉션 카드의 마지막 칸을 채워 120개 중 120개를 완성했습니다.','news7-mon':'8월','news7-title':'새로운 거북이 펫 합성','news7-text':'육아소에서 두 펫을 합성해 새로운 거북이 펫을 탄생시켰습니다.','news8-mon':'8월','news8-title':'새로운 화이트 타이거 펫 합성','news8-text':'새로운 화이트 타이거 펫을 합성 — 이번 주 컬렉션에 추가되었습니다.','news1-mon':'7월','news1-title':'단 1회 뽑기로 프린세스 다크니스 윙 획득','news1-text':'첫 뽑기에서 프린세스 다크니스 윙 의상을 획득 — 믿을 수 없을 만큼 운이 좋은 단발 뽑기였습니다.','news2-mon':'7월','news2-title':'벨루가 철갑상어 오로라를 낚음','news2-text':'낚시 중 희귀한 벨루가 철갑상어 오로라를 낚았습니다 — 가장 희귀한 어획물 중 하나입니다.','news3-mon':'7월','news3-title':'프린세스 하트 이벤트 완료','news3-text':'프린세스 하트 이벤트의 모든 단계를 완료하고 보상을 수령했습니다.','news5-mon':'6월','news5-title':'페이지 리디자인','news5-text':'뉴스 탭, 언어 전환기, 더 매끄러운 타임라인을 추가해 친구들이 더 쉽게 소식을 확인할 수 있게 했습니다.','news-tag-milestone':'마일스톤','news-tag-update':'업데이트','news-tag-derby':'더비','news-tag-gacha':'뽑기','news-tag-catch':'낚시','news-tag-event':'이벤트','news-tag-merge':'합성'
     }
   };
 
@@ -1499,9 +1537,30 @@
       const key = el.dataset.i18n;
       if (dict[key] !== undefined) el.textContent = dict[key];
     });
-    document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+    document.querySelectorAll('.lang-option').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+    const chosen = document.querySelector('.lang-option[data-lang="' + lang + '"]');
+    const label = document.getElementById('langDropdownLabel');
+    if (chosen && label) label.textContent = chosen.textContent;
     document.documentElement.lang = lang;
+    closeLangDropdown();
   }
+
+  function toggleLangDropdown(){
+    const dd = document.getElementById('langDropdown');
+    const trigger = document.getElementById('langDropdownTrigger');
+    const isOpen = dd.classList.toggle('open');
+    trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+  function closeLangDropdown(){
+    const dd = document.getElementById('langDropdown');
+    const trigger = document.getElementById('langDropdownTrigger');
+    dd.classList.remove('open');
+    trigger.setAttribute('aria-expanded', 'false');
+  }
+  document.addEventListener('click', (e) => {
+    const dd = document.getElementById('langDropdown');
+    if (dd && !dd.contains(e.target)) closeLangDropdown();
+  });
 
   const start = new Date(2021, 1, 1);
 
