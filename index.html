@@ -1,1 +1,1588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raijin — Play Together Stats</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF8EF;
+    --mint:#CFF3E0;
+    --mint-deep:#0F6E56;
+    --sky:#BEE3FF;
+    --sky-deep:#185FA5;
+    --coral:#FF8C7A;
+    --coral-deep:#993C1D;
+    --sun:#FFC857;
+    --sun-deep:#854F0B;
+    --lilac:#D9CCFF;
+    --lilac-deep:#534AB7;
+    --plum:#2E2440;
+    --muted:#7A7189;
+    --gold:#FFB703;
+    --card:#FFFFFF;
+    --radius:24px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:linear-gradient(180deg,var(--cream) 0%,#FDF3FF 60%,var(--cream) 100%);
+    font-family:'Nunito',sans-serif;
+    color:var(--plum);
+    overflow-x:hidden;
+  }
+  .wrap{max-width:960px;margin:0 auto;padding:0 24px 80px;}
+
+  /* ---------- NAV ---------- */
+  .nav{position:sticky;top:0;z-index:50;background:rgba(255,248,239,.9);backdrop-filter:blur(10px);border-bottom:1px solid rgba(46,36,64,.08);}
+  .nav-inner{max-width:960px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .nav-logo{display:flex;align-items:center;text-decoration:none;flex-shrink:0;}
+  .nav-logo img{display:block;height:34px;width:auto;max-width:160px;object-fit:contain;}
+  .nav-logo .nav-logo-fallback{display:none;}
+  .logo-word{
+    align-items:flex-end;position:relative;
+    font-family:'Baloo 2',cursive;font-weight:800;font-size:23px;letter-spacing:.01em;
+    color:#1274D8;line-height:1;
+    padding-bottom:5px;
+    background-image:linear-gradient(#1274D8,#1274D8);
+    background-repeat:no-repeat;
+    background-position:0 100%;
+    background-size:100% 3px;
+    transition:transform .2s ease;
+  }
+  .nav-logo:hover .logo-word{transform:translateY(-1px);}
+  .logo-i{position:relative;display:inline-flex;align-items:flex-end;justify-content:center;width:9px;height:1em;margin:0 1px;}
+  .logo-i-stem{width:5px;height:76%;background:currentColor;border-radius:2px;}
+  .logo-sun{position:absolute;top:-11px;left:50%;transform:translateX(-50%);width:14px;height:14px;overflow:visible;}
+  .nav-tabs{display:flex;gap:6px;flex-wrap:wrap;}
+  .nav-tab{position:relative;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;color:var(--muted);background:none;border:none;cursor:pointer;padding:8px 14px;border-radius:999px;transition:all .2s ease;}
+  .nav-tab:hover{background:var(--mint);color:var(--mint-deep);}
+  .nav-tab.active{background:var(--plum);color:#fff;box-shadow:0 4px 14px rgba(46,36,64,.3), 0 0 0 1px rgba(255,200,87,.4);}
+  .nav-tab.active::after{content:'';position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--sun);box-shadow:0 0 8px 2px rgba(255,183,3,.7);}
+
+  .nav-item-dropdown{position:relative;}
+  .nav-item-dropdown > .nav-tab{pointer-events:none;cursor:default;}
+  .nav-item-dropdown > .nav-tab:hover{background:none;color:var(--muted);}
+  .nav-item-dropdown > .nav-tab.active{background:var(--plum);color:#fff;}
+  .nav-item-dropdown .dropdown-menu{
+    position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(-6px);
+    padding-top:10px;
+    opacity:0;pointer-events:none;transition:opacity .18s ease, transform .18s ease;z-index:20;
+  }
+  .nav-item-dropdown:hover .dropdown-menu{
+    opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0);
+  }
+  .dropdown-menu-inner{
+    min-width:170px;background:var(--card);border-radius:18px;padding:8px;
+    box-shadow:0 14px 32px rgba(46,36,64,.16);
+    display:flex;flex-direction:column;gap:2px;
+  }
+  .dropdown-link{
+    display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+    font-family:'Nunito',sans-serif;font-weight:800;font-size:13.5px;color:var(--plum);
+    background:none;border:none;cursor:pointer;padding:10px 12px;border-radius:12px;transition:background .15s ease;
+  }
+  .dropdown-link svg{width:17px;height:17px;flex-shrink:0;color:var(--coral-deep);}
+  .dropdown-link:hover{background:var(--mint);}
+  .contact-btn{font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;background:var(--coral);color:#fff;border:none;cursor:pointer;padding:9px 18px;border-radius:999px;flex-shrink:0;transition:transform .2s ease,box-shadow .2s ease;box-shadow:0 4px 12px rgba(255,140,122,.35);}
+  .contact-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(255,140,122,.5);}
+  .contact-btn:hover{transform:translateY(-2px);}
+
+  /* ---------- LANGUAGE SWITCHER ---------- */
+  .lang-switch{display:flex;align-items:center;gap:2px;background:var(--mint);border-radius:999px;padding:3px;flex-shrink:0;}
+  .lang-btn{font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;letter-spacing:.02em;color:var(--mint-deep);background:none;border:none;cursor:pointer;padding:6px 11px;border-radius:999px;transition:all .2s ease;}
+  .lang-btn:hover{background:rgba(255,255,255,.5);}
+  .lang-btn.active{background:var(--plum);color:#fff;}
+
+  .tab-section{display:none;}
+  .tab-section.active{display:block;animation:fadeIn .4s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative;padding:56px 24px 30px;text-align:center;overflow:hidden;}
+  .blob{position:absolute;border-radius:50%;opacity:.55;z-index:0;animation:float 9s ease-in-out infinite;}
+  .blob.b1{width:180px;height:180px;background:var(--mint);top:-40px;left:5%;animation-delay:0s;}
+  .blob.b2{width:130px;height:130px;background:var(--sky);top:10px;right:8%;animation-delay:1.5s;}
+  .blob.b3{width:100px;height:100px;background:var(--sun);bottom:-20px;left:20%;animation-delay:3s;}
+  .blob.b4{width:90px;height:90px;background:var(--coral);bottom:0;right:20%;animation-delay:2s;}
+  @keyframes float{0%,100%{transform:translateY(0px);}50%{transform:translateY(-16px);}}
+  .eyebrow{position:relative;z-index:1;display:inline-block;font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--mint-deep);background:var(--mint);padding:6px 16px;border-radius:999px;margin-bottom:18px;}
+  .hero h1{position:relative;z-index:1;font-family:'Baloo 2',cursive;font-weight:800;font-size:clamp(38px,7vw,60px);margin:0 0 10px;}
+  .hero p.tag{position:relative;z-index:1;font-size:16px;font-weight:700;color:var(--muted);margin:0;}
+  .hero-avatar{position:relative;z-index:1;width:104px;height:104px;border-radius:24px;margin:6px auto 14px;overflow:hidden;border:4px solid #fff;box-shadow:0 8px 22px rgba(46,36,64,.16);cursor:zoom-in;transition:transform .2s ease, box-shadow .2s ease;background:linear-gradient(135deg,var(--mint),var(--sky));}
+  .hero-avatar:hover{transform:scale(1.04);box-shadow:0 10px 26px rgba(46,36,64,.22);}
+  .hero-avatar img{width:100%;height:100%;object-fit:cover;display:none;}
+  .hero-avatar-fallback{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--mint-deep);background:repeating-linear-gradient(135deg,rgba(255,255,255,.35) 0 10px,transparent 10px 20px);}
+  .hero-avatar-fallback svg{width:28px;height:28px;}
+  .hero-avatar-fallback span{font-size:10px;font-weight:800;background:rgba(255,255,255,.75);padding:3px 8px;border-radius:999px;letter-spacing:.01em;}
+
+  /* ---------- PROFILE CARD ---------- */
+  .profile-card{
+    position:relative;z-index:1;max-width:360px;margin:8px auto 0;
+    background:linear-gradient(180deg,#ffffff,#FFFCF5);
+    border-radius:30px;padding:26px 26px 24px;
+    box-shadow:0 18px 42px rgba(46,36,64,.12), 0 0 0 1px rgba(46,36,64,.04);
+    transition:transform .3s ease, box-shadow .3s ease;
+  }
+  .profile-name{
+    position:relative;z-index:1;font-family:'Baloo 2',cursive;font-weight:800;
+    font-size:clamp(32px,6vw,44px);margin:14px 0 2px;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+  }
+  .verified-badge{width:22px;height:22px;flex-shrink:0;filter:drop-shadow(0 2px 4px rgba(24,95,165,.35));}
+  .hero-avatar-wrap{position:relative;width:104px;margin:6px auto 22px;}
+  .hero-avatar-wrap::before{
+    content:'';position:absolute;inset:-6px;border-radius:28px;z-index:0;
+    background:conic-gradient(from 0deg,var(--coral),var(--sun),var(--mint-deep),var(--sky-deep),var(--lilac-deep),var(--coral));
+    animation:spinFrame 5s linear infinite;
+  }
+  @keyframes spinFrame{to{transform:rotate(360deg);}}
+  .hero-avatar-wrap .hero-avatar{margin:0;z-index:1;}
+  .status-dot-avatar{
+    position:absolute;top:0;right:-2px;width:17px;height:17px;border-radius:50%;
+    background:#2ECC71;border:3px solid #fff;box-shadow:0 0 0 3px rgba(46,204,113,.22);
+    animation:pulseDot 1.8s ease-in-out infinite;
+    z-index:2;
+  }
+  .level-chip-avatar{
+    position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);
+    background:linear-gradient(135deg,var(--gold),var(--sun));color:#5A3E00;
+    font-family:'Baloo 2',cursive;font-weight:800;font-size:12px;letter-spacing:.02em;
+    padding:3px 11px;border-radius:999px;border:3px solid #fff;
+    box-shadow:0 4px 10px rgba(255,183,3,.4);white-space:nowrap;
+    z-index:2;
+    animation:levelGlow 2.4s ease-in-out infinite;
+  }
+  @keyframes levelGlow{0%,100%{box-shadow:0 4px 10px rgba(255,183,3,.4);}50%{box-shadow:0 4px 10px rgba(255,183,3,.4),0 0 14px 3px rgba(255,183,3,.5);}}
+  .profile-pills{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:16px;}
+  .profile-pill{
+    display:flex;align-items:center;gap:5px;font-size:11.5px;font-weight:800;
+    color:var(--muted);background:#FAF7F2;padding:6px 12px;border-radius:999px;
+  }
+  .profile-pill svg{width:12px;height:12px;flex-shrink:0;stroke:var(--coral-deep);}
+  .profile-pill.is-rank{color:var(--sun-deep);background:#FFF3D6;}
+  .profile-pill.is-rank svg{stroke:var(--sun-deep);}
+
+  /* ---------- PROFILE SECTION RESPONSIVE ---------- */
+  @media(max-width:480px){
+    .hero{padding:36px 14px 22px;}
+    .profile-card{max-width:100%;padding:20px 16px 18px;border-radius:24px;}
+    .eyebrow{font-size:11.5px;padding:5px 13px;margin-bottom:14px;}
+    .profile-name{font-size:clamp(26px,8vw,34px);gap:6px;}
+    .verified-badge{width:18px;height:18px;}
+    .hero p.tag{font-size:13.5px;padding:0 6px;}
+    .profile-pills{gap:6px;margin-top:14px;}
+    .profile-pill{font-size:10.5px;padding:5px 10px;}
+  }
+  @media(min-width:1024px){
+    .profile-card{max-width:400px;}
+    .profile-card:hover{transform:translateY(-4px);box-shadow:0 26px 56px rgba(46,36,64,.16), 0 0 0 1px rgba(46,36,64,.05);}
+    .badge:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(255,183,3,.32);}
+  }
+
+  /* ---------- BADGE ---------- */
+  .badge-section{display:flex;justify-content:center;margin:32px 0 10px;position:relative;z-index:1;padding:0 16px;}
+  .badge{display:flex;align-items:center;gap:16px;background:linear-gradient(135deg,#FFE9B0,var(--sun));border:3px solid var(--gold);border-radius:999px;padding:14px 28px 14px 18px;box-shadow:0 8px 20px rgba(255,183,3,.25);max-width:100%;flex-wrap:wrap;justify-content:center;transition:transform .25s ease, box-shadow .25s ease;}
+  .badge .crown{width:42px;height:42px;flex-shrink:0;}
+  .badge .badge-text{min-width:0;}
+  .badge .badge-title{font-family:'Baloo 2',cursive;font-weight:700;font-size:20px;color:var(--sun-deep);line-height:1.25;overflow-wrap:break-word;}
+  .badge .badge-sub{font-size:13px;font-weight:700;color:#7A5A0E;text-transform:uppercase;letter-spacing:.04em;}
+
+  /* ---------- SECTION HEADINGS ---------- */
+  .section-heading{position:relative;text-align:center;font-family:'Baloo 2',cursive;font-weight:700;font-size:26px;margin:60px 0 8px;padding-bottom:14px;}
+  .section-heading::after{content:'';position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:46px;height:4px;border-radius:999px;background:linear-gradient(90deg,var(--coral),var(--sun));box-shadow:0 0 10px rgba(255,140,122,.55);}
+  .section-sub{text-align:center;color:var(--muted);font-weight:700;margin:0 0 36px;font-size:14px;}
+  .subsection-heading{font-family:'Baloo 2',cursive;font-weight:700;font-size:20px;margin:44px 0 4px;display:flex;align-items:center;gap:10px;}
+  .subsection-sub{color:var(--muted);font-weight:700;margin:0 0 20px;font-size:13px;}
+  .dot-tag{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+
+  /* ---------- STATS ---------- */
+  .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:20px;}
+  .stat-card{position:relative;background:var(--card);border-radius:var(--radius);padding:28px 18px;text-align:center;box-shadow:0 6px 18px rgba(46,36,64,.06);transition:transform .25s ease,box-shadow .25s ease;border:2px solid transparent;overflow:hidden;}
+  .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--coral),var(--sun),var(--sky),var(--lilac-deep));opacity:0;transition:opacity .25s ease;}
+  .stat-card:hover{transform:translateY(-6px);box-shadow:0 16px 32px rgba(46,36,64,.16);border-color:rgba(255,183,3,.35);}
+  .stat-card:hover::before{opacity:1;}
+  .icon-circle{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+  .icon-circle svg{width:32px;height:32px;}
+  .ic-coral{background:#FFE6E0;} .ic-coral svg{stroke:var(--coral-deep);}
+  .ic-mint{background:var(--mint);} .ic-mint svg{stroke:var(--mint-deep);}
+  .ic-sky{background:var(--sky);} .ic-sky svg{stroke:var(--sky-deep);}
+  .ic-lilac{background:var(--lilac);} .ic-lilac svg{stroke:var(--lilac-deep);}
+  .ic-sun{background:#FFF3D6;} .ic-sun svg{stroke:var(--sun-deep);}
+  .ic-teal{background:#DAF3E8;} .ic-teal svg{stroke:#0F6E56;}
+  .stat-number{font-family:'Baloo 2',cursive;font-weight:800;font-size:38px;color:var(--plum);line-height:1;}
+  .stat-label{margin-top:8px;font-size:14px;font-weight:700;color:var(--muted);}
+
+  /* ---------- GAME-STYLE LEVEL BAR ---------- */
+  .level-bar-section{max-width:600px;margin:34px auto 0;background:linear-gradient(135deg,var(--plum),#3E3158);border-radius:24px;padding:22px 26px;color:#fff;box-shadow:0 12px 30px rgba(46,36,64,.28);position:relative;overflow:hidden;}
+  .level-bar-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+  .level-badge{display:flex;align-items:center;gap:10px;font-family:'Baloo 2',cursive;font-weight:800;font-size:17px;}
+  .level-circle{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--sun));display:flex;align-items:center;justify-content:center;color:#5A3E00;font-weight:800;font-size:15px;flex-shrink:0;box-shadow:0 0 0 4px rgba(255,183,3,.22);}
+  .level-xp-text{font-size:12.5px;font-weight:700;color:rgba(255,255,255,.72);}
+  .xp-track{width:100%;height:16px;background:rgba(255,255,255,.14);border-radius:999px;overflow:hidden;position:relative;}
+  .xp-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--mint),var(--sky-deep));position:relative;overflow:hidden;width:0;transition:width 1.4s cubic-bezier(.22,.9,.3,1);}
+  .xp-fill::after{content:'';position:absolute;inset:0;width:40%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:xpShine 2.4s ease-in-out infinite;}
+  @keyframes xpShine{0%{transform:translateX(-120%);}100%{transform:translateX(350%);}}
+
+  /* ---------- VIDEO CELEBRATION ---------- */
+  .video-card{max-width:640px;margin:0 auto;background:var(--card);border-radius:28px;padding:14px;box-shadow:0 10px 26px rgba(46,36,64,.08);}
+  .video-card video{width:100%;display:block;border-radius:18px;background:#000;}
+  .video-caption{padding:14px 8px 4px;text-align:center;color:var(--muted);font-weight:700;font-size:13px;}
+
+  /* ---------- RANK CLIMB ---------- */
+  .rank-climb{display:flex;flex-direction:column;gap:14px;}
+  .rank-step{display:flex;flex-wrap:wrap;align-items:center;gap:18px;background:var(--card);border-radius:20px;padding:16px 20px;box-shadow:0 4px 14px rgba(46,36,64,.05);transition:box-shadow .3s ease;}
+  .rank-step.current{border:2px solid var(--gold);background:linear-gradient(135deg,#FFF7E0,#fff);box-shadow:0 4px 14px rgba(46,36,64,.05),0 0 0 4px rgba(255,183,3,.14);animation:rankGlow 2.6s ease-in-out infinite;}
+  @keyframes rankGlow{0%,100%{box-shadow:0 4px 14px rgba(46,36,64,.05),0 0 0 4px rgba(255,183,3,.1);}50%{box-shadow:0 4px 14px rgba(46,36,64,.05),0 0 0 7px rgba(255,183,3,.22);}}
+  .rank-num{flex-shrink:0;width:36px;height:36px;border-radius:50%;background:var(--plum);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-weight:700;font-size:15px;}
+  .rank-step.current .rank-num{background:var(--gold);color:#5A3E00;}
+  .rank-thumb{flex-shrink:0;width:64px;height:64px;border-radius:16px;border:2px dashed rgba(46,36,64,.18);display:flex;align-items:center;justify-content:center;color:var(--muted);background:#FAF7F2;}
+  .rank-thumb svg{width:24px;height:24px;}
+  .rank-info{flex:1 1 240px;min-width:0;}
+  .rank-name{font-family:'Baloo 2',cursive;font-weight:700;font-size:17px;}
+  .rank-note{font-size:13px;color:var(--muted);font-weight:700;}
+  .rank-tag{flex-shrink:0;font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;background:var(--gold);color:#5A3E00;padding:5px 12px;border-radius:999px;margin-left:auto;}
+  @media(max-width:640px){
+    .rank-step{padding:14px 16px;gap:12px;}
+    .rank-num{order:1;}
+    .rank-thumb{order:2;}
+    .rank-tag{order:3;margin-left:auto;}
+    .rank-info{order:4;flex:1 1 100%;width:100%;margin-top:2px;}
+  }
+
+  /* ---------- TROPHY (single image) ---------- */
+  .trophy-card{
+    max-width:520px;margin:0 auto;background:var(--card);border-radius:28px;overflow:hidden;
+    box-shadow:0 10px 26px rgba(46,36,64,.08);
+  }
+  .trophy-thumb{
+    position:relative;aspect-ratio:16/10;background:linear-gradient(135deg,#FFF3D6,#FFE9B0);
+    border-bottom:2px dashed rgba(133,79,11,.3);overflow:hidden;
+  }
+  .trophy-thumb img{width:100%;height:100%;object-fit:contain;display:none;}
+  .trophy-fallback{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--sun-deep);}
+  .trophy-thumb svg{width:44px;height:44px;}
+  .trophy-thumb span{font-size:13px;font-weight:800;}
+  .trophy-caption{padding:20px 22px;text-align:center;}
+  .trophy-caption .name{font-family:'Baloo 2',cursive;font-weight:700;font-size:18px;}
+  .trophy-caption .meta{font-size:13px;color:var(--muted);font-weight:700;margin-top:4px;}
+
+  /* ---------- GALLERY ---------- */
+  .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch;}
+  @media(max-width:720px){.gallery-grid{grid-template-columns:repeat(2,1fr);}}
+  .gallery-card{display:flex;flex-direction:column;height:100%;background:var(--card);border-radius:20px;overflow:hidden;box-shadow:0 6px 18px rgba(46,36,64,.06);transition:transform .3s ease,box-shadow .3s ease;}
+  .gallery-card:hover{transform:translateY(-5px);box-shadow:0 16px 32px rgba(46,36,64,.16);}
+  .gallery-thumb{position:relative;aspect-ratio:4/3;flex-shrink:0;background:#FAF7F2;border-bottom:2px dashed rgba(46,36,64,.12);overflow:hidden;}
+  .gallery-thumb img{width:100%;height:100%;object-fit:contain;display:none;}
+  .gallery-fallback{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--muted);}
+  .gallery-thumb svg{width:28px;height:28px;}
+  .gallery-thumb span{font-size:11px;font-weight:800;}
+  .gallery-caption{flex:1;display:flex;flex-direction:column;justify-content:center;padding:14px 16px;min-height:70px;}
+  .gallery-caption .name{font-family:'Baloo 2',cursive;font-weight:700;font-size:15px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;}
+  .gallery-caption .meta{font-size:13px;color:var(--muted);font-weight:700;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+
+  /* ---------- VIP BEARS CAROUSEL ---------- */
+  .vip-carousel{position:relative;padding:0 46px;}
+  .vip-carousel-track{
+    display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;
+    padding:10px 4px 20px;-ms-overflow-style:none;scrollbar-width:none;
+  }
+  .vip-carousel-track::-webkit-scrollbar{display:none;}
+  .vip-card{
+    position:relative;flex:0 0 auto;width:190px;aspect-ratio:4/3;border-radius:16px;overflow:hidden;
+    background:#FAF7F2;scroll-snap-align:center;box-shadow:0 6px 16px rgba(46,36,64,.12);
+    transition:transform .35s ease, box-shadow .35s ease, filter .35s ease;
+    filter:brightness(.72) saturate(.85);transform:scale(.92);
+  }
+  .vip-card img{width:100%;height:100%;object-fit:cover;display:none;}
+  .vip-card .vip-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,var(--lilac),var(--mint));color:var(--lilac-deep);}
+  .vip-card .vip-fallback svg{width:34px;height:34px;}
+  .vip-card.is-active{filter:brightness(1) saturate(1);transform:scale(1.08);box-shadow:0 16px 34px rgba(46,36,64,.28);z-index:2;}
+  .vip-arrow{
+    position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;
+    background:rgba(46,36,64,.85);color:#fff;border:none;display:flex;align-items:center;justify-content:center;
+    cursor:pointer;z-index:3;transition:background .2s ease, transform .2s ease;
+  }
+  .vip-arrow:hover{background:var(--plum);transform:translateY(-50%) scale(1.08);}
+  .vip-arrow svg{width:18px;height:18px;}
+  .vip-arrow-prev{left:0;}
+  .vip-arrow-next{right:0;}
+  @media(max-width:640px){.vip-carousel{padding:0 40px;}.vip-card{width:150px;}.vip-arrow{width:34px;height:34px;}}
+
+  /* ---------- POLAROID GALLERY (Drawing) ---------- */
+  .polaroid-grid{display:flex;flex-wrap:wrap;gap:34px 28px;justify-content:center;padding:16px 6px 20px;}
+  .polaroid-card{
+    --tilt:-3deg;
+    width:210px;background:#fff;padding:14px 14px 46px;
+    box-shadow:0 10px 22px rgba(46,36,64,.14);
+    transform:rotate(var(--tilt));transition:transform .3s ease, box-shadow .3s ease;
+    position:relative;cursor:pointer;
+  }
+  .polaroid-card:nth-child(2n){--tilt:2.5deg;}
+  .polaroid-card:nth-child(3n){--tilt:-1.5deg;}
+  .polaroid-card:nth-child(4n){--tilt:3.5deg;}
+  .polaroid-card:hover{transform:rotate(0deg) translateY(-8px) scale(1.04);box-shadow:0 22px 40px rgba(46,36,64,.26);z-index:2;}
+  .polaroid-card::before{
+    content:'';position:absolute;top:-10px;left:50%;transform:translateX(-50%) rotate(-2deg);
+    width:64px;height:22px;background:rgba(255,200,87,.55);border:1px solid rgba(133,79,11,.15);
+  }
+  .polaroid-photo{aspect-ratio:1/1;background:#FAF7F2;overflow:hidden;position:relative;}
+  .polaroid-photo img{width:100%;height:100%;object-fit:cover;display:none;}
+  .polaroid-photo .gallery-fallback{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--muted);}
+  .polaroid-photo svg{width:26px;height:26px;}
+  .polaroid-photo span{font-size:11px;font-weight:800;}
+  .polaroid-caption{position:absolute;bottom:12px;left:0;right:0;text-align:center;padding:0 10px;}
+  .polaroid-caption .name{font-family:'Baloo 2',cursive;font-weight:700;font-size:14.5px;color:var(--plum);}
+  .polaroid-caption .meta{font-size:11.5px;color:var(--muted);font-weight:700;margin-top:2px;}
+
+  /* ---------- ANIME BACKDROP (Cosplay) ---------- */
+  .cosplay-backdrop{
+    position:relative;border-radius:28px;overflow:hidden;padding:44px 20px 32px;
+    box-shadow:inset 0 0 90px rgba(0,0,0,.4), 0 20px 46px rgba(46,36,64,.28);
+    background:
+      radial-gradient(circle at 12% 10%, rgba(255,140,122,.4), transparent 42%),
+      radial-gradient(circle at 90% 18%, rgba(217,204,255,.4), transparent 45%),
+      radial-gradient(circle at 50% 105%, rgba(255,200,87,.3), transparent 55%),
+      repeating-conic-gradient(from 0deg at 50% 0%, rgba(255,255,255,.07) 0deg 2.2deg, transparent 2.2deg 9deg),
+      linear-gradient(135deg,#241934 0%,#3B2E5C 42%,#7A5AA8 75%,#FF8C7A 100%);
+  }
+  .cosplay-backdrop::before{
+    content:'';position:absolute;inset:0;pointer-events:none;
+    background-image:
+      radial-gradient(circle, rgba(255,255,255,.9) 1.5px, transparent 1.5px),
+      radial-gradient(circle, rgba(255,255,255,.55) 1.5px, transparent 1.5px);
+    background-size:120px 120px, 160px 160px;
+    background-position:0 0, 60px 80px;
+    animation:sparkleDrift 14s linear infinite;
+    opacity:.55;
+  }
+  .cosplay-backdrop::after{
+    content:'';position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(ellipse at 50% 120%, rgba(0,0,0,.45), transparent 60%);
+  }
+  @keyframes sparkleDrift{from{background-position:0 0, 60px 80px;}to{background-position:-240px 240px, -180px 320px;}}
+  .cosplay-kicker{position:relative;z-index:1;text-align:center;margin:0 0 22px;}
+  .cosplay-kicker span{
+    display:inline-flex;align-items:center;gap:6px;font-family:'Baloo 2',cursive;font-weight:700;
+    font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:#fff;
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);
+    padding:7px 16px;border-radius:999px;backdrop-filter:blur(4px);
+  }
+  .cosplay-backdrop .gallery-grid{position:relative;z-index:1;}
+  .cosplay-backdrop .gallery-card{
+    position:relative;background:rgba(255,255,255,.97);border-radius:22px;
+    border:3px solid transparent;
+    background-image:linear-gradient(rgba(255,255,255,.97),rgba(255,255,255,.97)),
+      linear-gradient(135deg,var(--coral),var(--lilac-deep));
+    background-origin:border-box;background-clip:padding-box, border-box;
+    box-shadow:0 10px 24px rgba(0,0,0,.32);
+    transition:transform .3s ease, box-shadow .3s ease;
+  }
+  .cosplay-backdrop .gallery-card:nth-child(2){
+    background-image:linear-gradient(rgba(255,255,255,.97),rgba(255,255,255,.97)),
+      linear-gradient(135deg,var(--sun),var(--coral-deep));
+  }
+  .cosplay-backdrop .gallery-card:nth-child(3){
+    background-image:linear-gradient(rgba(255,255,255,.97),rgba(255,255,255,.97)),
+      linear-gradient(135deg,var(--sky),var(--sky-deep));
+  }
+  .cosplay-backdrop .gallery-card:nth-child(4){
+    background-image:linear-gradient(rgba(255,255,255,.97),rgba(255,255,255,.97)),
+      linear-gradient(135deg,var(--mint),var(--mint-deep));
+  }
+  .cosplay-backdrop .gallery-card:hover{transform:translateY(-6px) scale(1.03) rotate(-.4deg);box-shadow:0 20px 42px rgba(0,0,0,.42),0 0 26px rgba(255,140,122,.4);}
+  .cosplay-backdrop .gallery-card::before{
+    content:'★';position:absolute;top:-11px;right:-9px;width:28px;height:28px;z-index:2;
+    background:var(--sun);color:#5A3E00;border-radius:50%;border:2px solid #fff;
+    display:flex;align-items:center;justify-content:center;font-size:13px;
+    box-shadow:0 4px 10px rgba(0,0,0,.3);
+  }
+  .cosplay-backdrop .gallery-thumb{background:#FAF7F2;}
+  .cosplay-backdrop .gallery-caption .name{color:var(--lilac-deep);}
+
+  /* ---------- ACTIVITIES SUB-TABS ---------- */
+  .sub-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
+  .sub-tab{font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;color:var(--muted);background:var(--card);border:none;cursor:pointer;padding:9px 18px;border-radius:999px;transition:all .2s ease;box-shadow:0 3px 10px rgba(46,36,64,.05);}
+  .sub-tab:hover{background:var(--mint);color:var(--mint-deep);}
+  .sub-tab.active{background:var(--coral);color:#fff;}
+  .sub-panel{display:none;}
+  .sub-panel.active{display:block;animation:fadeIn .35s ease;}
+
+  /* ---------- TIMELINE ---------- */
+  .timeline{position:relative;margin:20px 0 10px;padding:20px 0;}
+  .timeline::before{
+    content:'';position:absolute;left:50%;top:0;bottom:0;width:3px;
+    background:repeating-linear-gradient(to bottom, var(--lilac) 0 10px, transparent 10px 18px);
+    transform:translateX(-50%);
+  }
+  .timeline-item{position:relative;width:50%;padding:0 24px 46px;z-index:2;opacity:0;transition:opacity .7s ease, transform .7s ease;}
+  .timeline-item.left{left:0;text-align:right;transform:translate(-24px,18px);}
+  .timeline-item.right{left:50%;text-align:left;transform:translate(24px,18px);}
+  .timeline-item.in-view{opacity:1;transform:translate(0,0);}
+  .timeline-progress{position:absolute;left:50%;top:0;width:3px;height:0%;background:linear-gradient(180deg,var(--coral),var(--sun));transform:translateX(-50%);border-radius:3px;z-index:1;box-shadow:0 0 10px rgba(255,140,122,.55);transition:height .15s linear;}
+  @media(max-width:680px){.timeline-progress{left:18px;transform:none;}}
+  .timeline-item::after{
+    content:'';position:absolute;top:6px;width:18px;height:18px;border-radius:50%;
+    background:var(--coral);border:4px solid var(--cream);box-shadow:0 0 0 3px var(--coral);
+  }
+  .timeline-item.left::after{right:-9px;}
+  .timeline-item.right::after{left:-9px;}
+  .timeline-year{
+    display:inline-block;font-family:'Baloo 2',cursive;font-weight:800;font-size:22px;
+    color:var(--coral-deep);background:#FFE6E0;padding:3px 14px;border-radius:999px;margin-bottom:10px;
+  }
+  .timeline-card{
+    background:var(--card);border-radius:22px;padding:14px 14px 4px;
+    box-shadow:0 4px 14px rgba(46,36,64,.06);
+    transition:transform .3s ease, box-shadow .3s ease;
+  }
+  .timeline-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 20px 40px rgba(46,36,64,.20);
+  }
+  .timeline-thumb{
+    position:relative;width:100%;aspect-ratio:3/4;border-radius:16px;overflow:hidden;margin-bottom:10px;
+    background:#FAF7F2;
+  }
+  .timeline-thumb.landscape{aspect-ratio:16/9;}
+  .timeline-thumb img{width:100%;height:100%;object-fit:contain;display:none;transition:transform .4s ease;}
+  .timeline-card:hover .timeline-thumb img{transform:scale(1.08);}
+  .timeline-thumb .thumb-fallback{
+    width:100%;height:100%;background:#FAF7F2;border:2px dashed rgba(46,36,64,.15);border-radius:16px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--muted);
+  }
+  .timeline-thumb .thumb-fallback svg{width:24px;height:24px;}
+  .timeline-thumb .thumb-fallback span{font-size:11px;font-weight:800;}
+  .timeline-item p{margin:0;padding-bottom:14px;font-size:14px;color:var(--muted);font-weight:700;line-height:1.6;}
+  @media(max-width:680px){
+    .timeline::before{left:18px;}
+    .timeline-item, .timeline-item.left, .timeline-item.right{
+      width:100%;left:0;text-align:left;padding:0 0 40px 50px;
+    }
+    .timeline-item.left::after, .timeline-item.right::after{left:9px;}
+  }
+
+  /* ---------- ABOUT ---------- */
+  .about{margin-top:20px;background:var(--card);border-radius:32px;padding:40px;display:flex;gap:32px;align-items:center;box-shadow:0 6px 24px rgba(46,36,64,.06);}
+  @media(max-width:640px){.about{flex-direction:column;text-align:center;}}
+  .avatar{width:150px;height:150px;border-radius:22px;flex-shrink:0;background:linear-gradient(135deg,var(--mint),var(--sky));display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-size:60px;font-weight:700;color:var(--plum);border:5px solid #fff;box-shadow:0 6px 20px rgba(46,36,64,.15);overflow:hidden;cursor:zoom-in;position:relative;transition:transform .2s ease;}
+  .avatar:hover{transform:scale(1.03);}
+  .avatar img{width:100%;height:100%;object-fit:cover;display:none;}
+  .avatar-hint{
+    position:absolute;bottom:8px;right:8px;width:30px;height:30px;border-radius:50%;
+    background:rgba(46,36,64,.55);display:flex;align-items:center;justify-content:center;
+  }
+  .avatar-hint svg{width:15px;height:15px;stroke:#fff;}
+  .about h2{font-family:'Baloo 2',cursive;font-size:26px;margin:0 0 6px;}
+  .about .since{display:inline-block;font-size:13px;font-weight:800;color:var(--mint-deep);background:var(--mint);padding:4px 12px;border-radius:999px;margin-bottom:12px;}
+  .status-pill{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:800;padding:4px 12px 4px 10px;border-radius:999px;margin-bottom:12px;margin-left:8px;text-transform:uppercase;letter-spacing:.03em;}
+  .status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+  .status-pill.is-active{background:#DCF7E3;color:#1B7A3D;}
+  .status-pill.is-active .status-dot{background:#2ECC71;box-shadow:0 0 0 4px rgba(46,204,113,.22);animation:pulseDot 1.8s ease-in-out infinite;}
+  .status-pill.is-inactive{background:#FBE3E0;color:#9A2E20;}
+  .status-pill.is-inactive .status-dot{background:#E5533D;}
+
+  /* ---------- VIEWS COUNTER ---------- */
+  @keyframes pulseDot{0%,100%{box-shadow:0 0 0 4px rgba(46,204,113,.22);}50%{box-shadow:0 0 0 7px rgba(46,204,113,.08);}}
+  .about p{margin:0 0 18px;color:var(--muted);font-weight:700;line-height:1.6;}
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap;}
+  @media(max-width:640px){.btn-row{justify-content:center;}}
+  .gh-btn, .contact-btn-inline{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-weight:800;font-size:14px;padding:12px 22px;border-radius:999px;transition:transform .2s ease, background .2s ease;border:none;cursor:pointer;}
+  .gh-btn{background:var(--plum);color:#fff;}
+  .gh-btn:hover{transform:translateY(-2px);background:#443560;}
+  .contact-btn-inline{background:var(--coral);color:#fff;}
+  .contact-btn-inline:hover{transform:translateY(-2px);}
+  .gh-btn svg{width:18px;height:18px;fill:none;stroke:#fff;}
+
+  /* ---------- SITEWIDE FOOTER ---------- */
+  .site-footer{position:relative;margin-top:64px;background:linear-gradient(180deg,#2E2440,#241B33);color:rgba(255,255,255,.82);overflow:hidden;}
+  .site-footer::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:6px;
+    background:linear-gradient(90deg,var(--coral),var(--sun),var(--mint-deep),var(--sky-deep),var(--lilac-deep));
+  }
+  .footer-inner{max-width:960px;margin:0 auto;padding:52px 24px 28px;}
+  .footer-top{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:36px;padding-bottom:34px;border-bottom:1px solid rgba(255,255,255,.12);}
+  @media(max-width:720px){.footer-top{grid-template-columns:1fr;gap:30px;text-align:center;}}
+  .footer-brand-logo{display:inline-flex;align-items:flex-end;font-family:'Baloo 2',cursive;font-weight:800;font-size:22px;color:#fff;position:relative;padding-bottom:5px;background-image:linear-gradient(#FFC857,#FFC857);background-repeat:no-repeat;background-position:0 100%;background-size:100% 3px;}
+  .footer-brand-logo .logo-i-stem{background:#fff;}
+  .footer-brand-text{margin:14px 0 0;font-size:13.5px;font-weight:700;line-height:1.7;color:rgba(255,255,255,.62);max-width:280px;}
+  @media(max-width:720px){.footer-brand-text{margin-left:auto;margin-right:auto;}}
+  .footer-col-title{font-family:'Baloo 2',cursive;font-weight:700;font-size:15px;color:#fff;margin:0 0 16px;}
+  .footer-links{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:11px;}
+  .footer-links button{background:none;border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:13.5px;color:rgba(255,255,255,.68);padding:0;transition:color .2s ease;}
+  .footer-links button:hover{color:var(--sun);}
+  .footer-social{display:flex;gap:12px;flex-wrap:wrap;}
+  @media(max-width:720px){.footer-social{justify-content:center;}}
+  .footer-social a{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;transition:transform .2s ease, background .2s ease;flex-shrink:0;}
+  .footer-social a svg{width:17px;height:17px;fill:#fff;}
+  .footer-social a:hover{transform:translateY(-3px);background:var(--coral);}
+  .footer-contact-mini{margin-top:18px;font-size:13px;font-weight:800;color:rgba(255,255,255,.68);background:none;border:none;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:3px;}
+  .footer-contact-mini:hover{color:var(--sun);}
+  .footer-bottom{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding-top:22px;font-size:12px;font-weight:700;color:rgba(255,255,255,.5);line-height:1.7;}
+  .footer-bottom .copyright{font-size:11px;letter-spacing:.02em;color:rgba(255,255,255,.4);}
+
+  /* ---------- CONTACT MODAL ---------- */
+  .modal-overlay{display:none;position:fixed;inset:0;z-index:100;background:rgba(46,36,64,.45);align-items:center;justify-content:center;padding:20px;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:#fff;border-radius:28px;padding:32px;max-width:380px;width:100%;position:relative;box-shadow:0 20px 50px rgba(46,36,64,.25);animation:popIn .25s ease;}
+  @keyframes popIn{from{opacity:0;transform:scale(.92);}to{opacity:1;transform:scale(1);}}
+  .modal-close{position:absolute;top:16px;right:16px;background:#FAF7F2;border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;color:var(--muted);font-weight:800;}
+  .modal h3{font-family:'Baloo 2',cursive;font-size:22px;margin:0 0 4px;}
+  .modal p.sub{color:var(--muted);font-weight:700;font-size:14px;margin:0 0 22px;}
+  .contact-row{display:flex;align-items:center;gap:14px;padding:14px;border-radius:16px;background:#FAF7F2;margin-bottom:12px;text-decoration:none;color:var(--plum);transition:background .2s ease;}
+  .contact-row:hover{background:var(--mint);}
+  .contact-row .ic{width:40px;height:40px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .contact-row .ic svg{width:20px;height:20px;stroke:var(--coral-deep);}
+  .contact-row .txt .lbl{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
+  .contact-row .txt .val{font-weight:800;font-size:15px;}
+
+  /* ---------- NEWS ---------- */
+  .news-list{display:flex;flex-direction:column;gap:16px;max-width:680px;margin:0 auto;}
+  .news-card{display:flex;gap:18px;background:var(--card);border-radius:22px;padding:20px 22px;box-shadow:0 6px 18px rgba(46,36,64,.06);transition:transform .25s ease,box-shadow .25s ease;border-left:5px solid var(--coral);}
+  .news-card:hover{transform:translateY(-4px) scale(1.01);box-shadow:0 14px 30px rgba(46,36,64,.14);}
+  .news-card.tag-milestone{border-left-color:var(--gold);}
+  .news-card.tag-gacha{border-left-color:var(--lilac-deep);}
+  .news-card.tag-merge{border-left-color:var(--mint-deep);}
+  .news-card.tag-catch{border-left-color:var(--sky-deep);}
+  .news-card.tag-event{border-left-color:var(--coral);}
+  .news-card.tag-update{border-left-color:var(--plum);}
+  .news-date{flex-shrink:0;width:64px;text-align:center;background:var(--mint);border-radius:14px;padding:8px 4px;color:var(--mint-deep);}
+  .news-date .d-num{display:block;font-family:'Baloo 2',cursive;font-weight:800;font-size:20px;line-height:1;}
+  .news-date .d-mon{display:block;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
+  .news-body .news-title{font-family:'Baloo 2',cursive;font-weight:700;font-size:17px;margin-bottom:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .news-tag{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;background:var(--coral);color:#fff;padding:3px 10px;border-radius:999px;box-shadow:0 2px 6px rgba(0,0,0,.12);}
+  .news-tag.tag-milestone{background:linear-gradient(135deg,var(--sun),var(--gold));color:#5A3E00;}
+  .news-tag.tag-gacha{background:linear-gradient(135deg,var(--lilac-deep),#8A7CE0);color:#fff;}
+  .news-tag.tag-merge{background:linear-gradient(135deg,var(--mint-deep),#17A784);color:#fff;}
+  .news-tag.tag-catch{background:linear-gradient(135deg,var(--sky-deep),#3F8FDB);color:#fff;}
+  .news-tag.tag-event{background:linear-gradient(135deg,var(--coral-deep),var(--coral));color:#fff;}
+  .news-tag.tag-update{background:linear-gradient(135deg,var(--plum),#4A3D68);color:#fff;}
+  .news-body p{margin:0;font-size:13.5px;color:var(--muted);font-weight:700;line-height:1.6;}
+
+  /* ---------- LIGHTBOX ---------- */
+  .lightbox-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(20,14,30,.85);align-items:center;justify-content:center;padding:30px;}
+  .lightbox-overlay.open{display:flex;}
+  .lightbox-overlay img{max-width:90vw;max-height:85vh;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.4);animation:popIn .25s ease;}
+  .lightbox-close{position:fixed;top:20px;right:24px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:20px;font-weight:800;cursor:pointer;}
+  .lightbox-close:hover{background:rgba(255,255,255,.28);}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#" onclick="return false;">
+      <img src="haegin-logo.png" alt="Haegin" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+      <span class="nav-logo-fallback logo-word" aria-label="Haegin">
+        <span>HAEG</span><span class="logo-i"><span class="logo-i-stem"></span><svg class="logo-sun" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="4.4" fill="#FFC857"/>
+          <g stroke="#FFC857" stroke-width="2.3" stroke-linecap="round">
+            <line x1="12" y1="1.4" x2="12" y2="4.2"/>
+            <line x1="12" y1="19.8" x2="12" y2="22.6"/>
+            <line x1="1.4" y1="12" x2="4.2" y2="12"/>
+            <line x1="19.8" y1="12" x2="22.6" y2="12"/>
+            <line x1="4.4" y1="4.4" x2="6.3" y2="6.3"/>
+            <line x1="17.7" y1="17.7" x2="19.6" y2="19.6"/>
+          </g>
+        </svg></span><span>N</span>
+      </span>
+    </a>
+    <div class="nav-tabs">
+      <button class="nav-tab active" data-tab="home" data-i18n="nav-home">Home</button>
+      <button class="nav-tab" data-tab="about" data-i18n="nav-about">About me</button>
+      <button class="nav-tab" data-tab="news" data-i18n="nav-news">News</button>
+      <button class="nav-tab" data-tab="derby" data-i18n="nav-derby">Derby</button>
+      <button class="nav-tab" data-tab="collection" data-i18n="nav-collection">Collection</button>
+      <div class="nav-item-dropdown">
+        <button class="nav-tab" data-tab="activities" data-i18n="nav-activities">Activities</button>
+        <div class="dropdown-menu">
+          <div class="dropdown-menu-inner">
+            <button class="dropdown-link" data-tab="activities" data-subtab="drawing">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+              <span data-i18n="nav-drawing">Drawing</span>
+            </button>
+            <button class="dropdown-link" data-tab="activities" data-subtab="cosplay">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M6 21c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+              <span data-i18n="nav-cosplay">Cosplay</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" data-lang="vi" onclick="setLang('vi')">VN</button>
+        <button class="lang-btn" data-lang="th" onclick="setLang('th')">TH</button>
+      </div>
+      <button class="contact-btn" onclick="openContact()" data-i18n="nav-contact">Contact me</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ HOME ============ -->
+<section class="tab-section active" id="tab-home">
+
+  <div class="hero">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+    <div class="blob b4"></div>
+    <div class="profile-card">
+      <span class="eyebrow" data-i18n="hero-eyebrow">Play Together • Player card</span>
+      <h1 class="profile-name">
+        Raijin
+        <svg class="verified-badge" viewBox="0 0 24 24" fill="var(--sky-deep)" aria-label="Verified">
+          <path d="M12 1.6l2.6 1.9 3.2-.3 1.1 3 2.9 1.5-.7 3.2.7 3.2-2.9 1.5-1.1 3-3.2-.3L12 21.2l-2.6-1.9-3.2.3-1.1-3-2.9-1.5.7-3.2-.7-3.2 2.9-1.5 1.1-3 3.2.3z"/>
+          <path d="M8.4 12.2l2.4 2.3 4.8-5.1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </h1>
+      <div class="hero-avatar-wrap">
+        <div class="hero-avatar" id="heroAvatarWrap" onclick="openLightbox('rai.jpg')">
+          <img id="heroAvatarImg" src="rai.jpg" alt="Raijin" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+          <div class="hero-avatar-fallback">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-4-4 3-3-2-6 5"/></svg>
+            <span>Add rai.jpg</span>
+          </div>
+        </div>
+        <span class="status-dot-avatar" title="Active now"></span>
+        <span class="level-chip-avatar" data-i18n="profile-level-chip">Lv. 26</span>
+      </div>
+      <p class="tag" data-i18n="hero-tag">Collecting pets on the island since Feb 2021</p>
+      <div class="profile-pills">
+        <span class="profile-pill">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 4 6 4 9s-1.5 6.4-4 9c-2.5-2.6-4-6-4-9s1.5-6.4 4-9z"/></svg>
+          <span data-i18n="profile-pill-server">Asia Server</span>
+        </span>
+        <span class="profile-pill is-rank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 8l4 3 5-6 5 6 4-3-2 10H5L3 8z"/></svg>
+          <span data-i18n="profile-pill-rank">#1 Zombie Rank</span>
+        </span>
+        <span class="profile-pill">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18"/><path d="M8 3v4M16 3v4"/></svg>
+          <span data-i18n="profile-pill-since">Since 2021</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <div class="badge-section">
+      <div class="badge">
+        <svg class="crown" viewBox="0 0 24 24" fill="none" stroke="#854F0B" stroke-width="1.8" stroke-linejoin="round">
+          <path d="M3 8l4 3 5-6 5 6 4-3-2 10H5L3 8z"/>
+          <path d="M5 18h14" stroke-linecap="round"/>
+        </svg>
+        <div class="badge-text">
+          <div class="badge-title" data-i18n="badge-title">#1 Zombie — Asia server</div>
+          <div class="badge-sub" data-i18n="badge-sub">Top ranked</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="level-bar-section">
+      <div class="level-bar-top">
+        <div class="level-badge"><div class="level-circle">26</div><span data-i18n="level-label">Level 26</span></div>
+        <div class="level-xp-text"><span data-i18n="level-xp">25 / 30 XP to Level 27</span></div>
+      </div>
+      <div class="xp-track"><div class="xp-fill" id="xpFill" data-percent="83.33"></div></div>
+    </div>
+
+    <h2 class="section-heading" data-i18n="stats-heading">My Play Together stats</h2>
+    <p class="section-sub" data-i18n="stats-sub">Numbers updated every week</p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="icon-circle ic-coral">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="15" r="4.2"/><circle cx="6" cy="7" r="2"/><circle cx="18" cy="7" r="2"/>
+            <circle cx="9.5" cy="4.2" r="1.7"/><circle cx="14.5" cy="4.2" r="1.7"/>
+          </svg>
+        </div>
+        <div class="stat-number" data-target="167">0</div>
+        <div class="stat-label" data-i18n="stat-combined">Combined pets</div>
+      </div>
+      <div class="stat-card">
+        <div class="icon-circle ic-mint">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 21s-7-4.35-9.5-8.5C.7 8.7 2.6 5 6.3 5c2 0 3.4 1.1 4.2 2.3.3.4.9.4 1.2 0C12.5 6.1 13.9 5 15.9 5c3.7 0 5.6 3.7 3.8 7.5C17.1 16.65 12 21 12 21z"/>
+          </svg>
+        </div>
+        <div class="stat-number" data-target="956">0</div>
+        <div class="stat-label" data-i18n="stat-total-pets">Total pets</div>
+      </div>
+      <div class="stat-card">
+        <div class="icon-circle ic-sky">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="7" cy="6.2" r="2.1"/><circle cx="17" cy="6.2" r="2.1"/>
+            <circle cx="12" cy="13" r="7"/>
+            <circle cx="9.4" cy="11.6" r=".9" fill="currentColor" stroke="none"/>
+            <circle cx="14.6" cy="11.6" r=".9" fill="currentColor" stroke="none"/>
+            <path d="M10.7 14.6c.5.5 2.1.5 2.6 0" fill="none"/>
+            <circle cx="12" cy="14.2" r="1.1" fill="currentColor" stroke="none"/>
+          </svg>
+        </div>
+        <div class="stat-number" id="vipBears" data-target="94">0</div>
+        <div class="stat-label" data-i18n="stat-vip-bears">VIP bears</div>
+      </div>
+      <div class="stat-card">
+        <div class="icon-circle ic-sun">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12c3-4 7-6 11-6 2 0 4 .8 5.5 2L21 6v6l-1.5 2c-1.5 1.2-3.5 2-5.5 2-4 0-8-2-11-6z"/>
+            <circle cx="16" cy="10.5" r=".8" fill="currentColor" stroke="none"/>
+          </svg>
+        </div>
+        <div class="stat-number" id="totalFishes" data-target="961">0</div>
+        <div class="stat-label" data-i18n="stat-total-fishes">Total fishes</div>
+      </div>
+      <div class="stat-card">
+        <div class="icon-circle ic-lilac">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18"/><path d="M8 3v4M16 3v4"/>
+          </svg>
+        </div>
+        <div class="stat-number" id="yearsPlaying">0</div>
+        <div class="stat-label" data-i18n="stat-years">Years playing</div>
+      </div>
+      <div class="stat-card">
+        <div class="icon-circle ic-teal">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <ellipse cx="12" cy="13" rx="5" ry="7"/>
+            <line x1="12" y1="6.5" x2="12" y2="19.5"/>
+            <path d="M7 9L3 6M17 9l4-3M7 13H2M22 13h-5M7 17l-4 3M17 17l4 3"/>
+            <circle cx="9.3" cy="4" r="1"/><circle cx="14.7" cy="4" r="1"/>
+          </svg>
+        </div>
+        <div class="stat-number" id="totalInsects" data-target="421">0</div>
+        <div class="stat-label" data-i18n="stat-total-insects">Total insects</div>
+      </div>
+    </div>
+
+    <h2 class="section-heading" data-i18n="milestone-heading">My Milestone</h2>
+    <p class="section-sub" data-i18n="milestone-sub">The road to #1 — replace each thumbnail with a real screenshot when ready</p>
+
+    <div class="rank-climb">
+      <div class="rank-step">
+        <div class="rank-num">1</div>
+        <div class="rank-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-4-4 3-3-2-6 5"/></svg></div>
+        <div class="rank-info"><div class="rank-name" data-i18n="rank1-name">Caught My First Blue Whale</div><div class="rank-note" data-i18n="rank1-note">A memorable milestone that marked my biggest fishing achievements.</div></div>
+      </div>
+      <div class="rank-step">
+        <div class="rank-num">2</div>
+        <div class="rank-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-4-4 3-3-2-6 5"/></svg></div>
+        <div class="rank-info"><div class="rank-name" data-i18n="rank2-name">Purchased My Dream Car – Rolls-Royce</div><div class="rank-note" data-i18n="rank2-note">Achieved this persnal goal on November 01, 2022</div></div>
+      </div>
+      <div class="rank-step">
+        <div class="rank-num">3</div>
+        <div class="rank-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-4-4 3-3-2-6 5"/></svg></div>
+        <div class="rank-info"><div class="rank-name" data-i18n="rank3-name">Reached 4,000 Points & Earned the Purple Badge</div><div class="rank-note" data-i18n="rank3-note">Achieved by playing zombie virus frequently to get crowned coins</div></div>
+      </div>
+      <div class="rank-step">
+        <div class="rank-num">4</div>
+        <div class="rank-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-4-4 3-3-2-6 5"/></svg></div>
+        <div class="rank-info"><div class="rank-name" data-i18n="rank4-name">Reached Level 26 – First Player in Asia</div><div class="rank-note" data-i18n="rank4-note">Completed the newly released Level 26 within 24 hours, becoming the first player in Asia to achieve this milestone.</div></div>
+      </div>
+      <div class="rank-step current">
+        <div class="rank-num">5</div>
+        <div class="rank-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-4-4 3-3-2-6 5"/></svg></div>
+        <div class="rank-info"><div class="rank-name" data-i18n="rank5-name">Defending the #1 Rank in Asia (2021 – Present)</div><div class="rank-note" data-i18n="rank5-note">Maintained the top position in Asia through consistent performance and commitment since 2021.</div></div>
+        <div class="rank-tag" data-i18n="rank5-tag">You're here</div>
+      </div>
+    </div>
+
+    <h2 class="section-heading" data-i18n="video-heading">4,000 Badge Celebration</h2>
+    <p class="section-sub" data-i18n="video-sub">Replace the file below with your own celebration clip</p>
+    <div class="video-card">
+      <video autoplay muted loop playsinline controls preload="auto" poster="badge-4000-poster.jpg">
+        <source src="vid.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="video-caption" data-i18n="video-caption">Hitting 4,000 points & earning the Purple Badge 🏆</div>
+    </div>
+
+    <h2 class="section-heading" data-i18n="derby-home-heading">My Derby Plaques</h2>
+    <p class="section-sub" data-i18n="derby-home-sub">Best derby moment — swap in your screenshot</p>
+    <div class="trophy-card">
+      <div class="trophy-thumb">
+        <img src="derby.PNG" alt="Derby champion moment" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      </div>
+      <div class="trophy-caption">
+        <div class="name" data-i18n="trophy-name">Derby champion moment</div>
+        <div class="meta" data-i18n="trophy-meta">Add the placement, date, and horse name here</div>
+      </div>
+    </div>
+
+    <h2 class="section-heading" data-i18n="zombie-heading">My Zombie Virus journey</h2>
+    <p class="section-sub" data-i18n="zombie-sub">A timeline of milestones behind my #1 Zombie Rank in Asia</p>
+
+    <div class="timeline">
+      <div class="timeline-item left">
+        <div class="timeline-year">2021</div>
+        <div class="timeline-card">
+          <div class="timeline-thumb landscape">
+          <img src="2021.jpg" alt="2021" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+        </div>
+        <p data-i18n="tl2021">Began my Play Together journey and quickly rose to the top, earning the Top1 Zombie Rank - Oct 29, 2021</p>
+        </div>
+      </div>
+      <div class="timeline-item right">
+        <div class="timeline-year">2022</div>
+        <div class="timeline-card">
+          <div class="timeline-thumb">
+          <img src="2022.PNG" alt="2022" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+        </div>
+        <p data-i18n="tl2022">Closed the year with 19,000 Zombie Wins, strengthening my position as Asia's Top1 player</p>
+        </div>
+      </div>
+      <div class="timeline-item left">
+        <div class="timeline-year">2023</div>
+        <div class="timeline-card">
+          <div class="timeline-thumb">
+          <img src="2023.PNG" alt="2023" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+        </div>
+        <p data-i18n="tl2023">Continued dominating the rankings by reaching 26,000 Zombie Wins while defending the #1 spot</p>
+        </div>
+      </div>
+      <div class="timeline-item right">
+        <div class="timeline-year">2024</div>
+        <div class="timeline-card">
+          <div class="timeline-thumb">
+          <img src="2024.jpg" alt="2024" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+        </div>
+        <p data-i18n="tl2024">Earned 28,000 Zombie Wins while holding Philippine Flag with the viral song "Piliin Mo ang Pilipinas" trend</p>
+        </div>
+      </div>
+      <div class="timeline-item left">
+        <div class="timeline-year">2025</div>
+        <div class="timeline-card">
+          <div class="timeline-thumb">
+          <img src="2025.jpg" alt="2025" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+        </div>
+        <p data-i18n="tl2025">Kept climbing until i reached 29,000 Wins before year ends</p>
+        </div>
+      </div>
+      <div class="timeline-item right">
+        <div class="timeline-year">2026</div>
+        <div class="timeline-card">
+          <div class="timeline-thumb">
+          <img src="2026.jpg" alt="2026" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+        </div>
+        <p data-i18n="tl2026">Reached 30,000 Wins Zombie on the Asia server — currently defending the Rank 1 spot. Retirement is near</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ DERBY ============ -->
+<section class="tab-section" id="tab-derby">
+  <div class="wrap">
+    <h2 class="section-heading" style="margin-top:56px;" data-i18n="derby-heading">Derby</h2>
+    <p class="section-sub" data-i18n="derby-sub">My derby wins and best runs</p>
+    <div class="gallery-grid">
+      <div class="gallery-card"><div class="gallery-thumb"><img src="der1.jpg" alt="Derby run #1" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Blue Whale Fishing Event</div><div class="meta">First place with 1269 points.1whale = 1000+ points</div></div></div>
+      <div class="gallery-card"><div class="gallery-thumb"><img src="der6.PNG" alt="Derby run #2" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Mini Game Event</div><div class="meta">3 peat in the hardest derby ever. Game Party, Zombie Virus & Shoot i.o</div></div></div>
+      <div class="gallery-card"><div class="gallery-thumb"><img src="der3.jpg" alt="Derby run #3" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">School Event</div><div class="meta">Rise to the Top of the Derby Leaderboard</div></div></div>
+      <div class="gallery-card"><div class="gallery-thumb"><img src="der2.jpg" alt="Derby run #3" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Fossil Event</div><div class="meta">Secure First Place in the Mining Event </div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COLLECTION ============ -->
+<section class="tab-section" id="tab-collection">
+  <div class="wrap">
+    <h2 class="section-heading" style="margin-top:56px;" data-i18n="collection-heading">Collection</h2>
+    <p class="section-sub" data-i18n="collection-sub">Everything I've collected on the KAIA island so far</p>
+
+    <h3 class="subsection-heading"><span class="dot-tag" style="background:var(--coral-deep);"></span><span data-i18n="pets-heading">Pets</span></h3>
+    <p class="subsection-sub" data-i18n="pets-sub">956 total, 167 combined</p>
+    <div class="gallery-grid">
+      <div class="gallery-card"><div class="gallery-thumb"><img src="pet-1.jpg" alt="Pet #1" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Pet #1</div><div class="meta">Add name + rarity</div></div></div>
+      <div class="gallery-card"><div class="gallery-thumb"><img src="pet-2.jpg" alt="Pet #2" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Pet #2</div><div class="meta">Add name + rarity</div></div></div>
+      <div class="gallery-card"><div class="gallery-thumb"><img src="pet-3.jpg" alt="Pet #3" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Pet #3</div><div class="meta">Add name + rarity</div></div></div>
+    </div>
+
+    <h3 class="subsection-heading"><span class="dot-tag" style="background:var(--sun-deep);"></span><span data-i18n="fishes-heading">Fishes</span></h3>
+    <p class="subsection-sub" data-i18n="fishes-sub">My Greatest catch</p>
+    <div class="gallery-grid">
+      <div class="gallery-card"><div class="gallery-thumb"><img src="fish.jpg" alt="Fish #1" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Pink Megalodon</div><div class="meta">Ocean + VVIP</div></div></div>
+      <div class="gallery-card"><div class="gallery-thumb"><img src="bluewhale.jpg" alt="Fish #2" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Blue Whale</div><div class="meta">Ocean + VVIP</div></div></div>
+      <div class="gallery-card"><div class="gallery-thumb"><img src="fish01.jpg" alt="Fish #3" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Beluga Sturgeon</div><div class="meta">Lake + VIP</div></div></div>
+    </div>
+
+    <h3 class="subsection-heading"><span class="dot-tag" style="background:var(--sky-deep);"></span><span data-i18n="cars-heading">Cars</span></h3>
+    <p class="subsection-sub" data-i18n="cars-sub">Garage lineup</p>
+
+    <div class="sub-tabs">
+      <button class="sub-tab active" data-subtab="auto" data-i18n="nav-auto">Auto</button>
+      <button class="sub-tab" data-subtab="marine" data-i18n="nav-marine">Marine</button>
+      <button class="sub-tab" data-subtab="moto" data-i18n="nav-moto">Moto</button>
+      <button class="sub-tab" data-subtab="aerial" data-i18n="nav-aerial">Aerial</button>
+    </div>
+
+    <div class="sub-panel active" id="subtab-auto">
+      <div class="gallery-grid">
+        <div class="gallery-card"><div class="gallery-thumb"><img src="aut1.jpg" alt="Chevrolet Camaro Convertible + VVIP" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Chevrolet Camaro</div><div class="meta">Sporty Convertible (Black) + VVIP</div></div></div>
+        <div class="gallery-card"><div class="gallery-thumb"><img src="aut2.jpg" alt="Classic Silver Limousine + VVIP" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Limousine</div><div class="meta">Classic Silver + VVIP</div></div></div>
+        <div class="gallery-card"><div class="gallery-thumb"><img src="aut3.jpg" alt="Luxury Convertible Rollsroyce + VVIP" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Rollsroyce</div><div class="meta">Luxury Convertible (White) + VVIP</div></div></div>
+      </div>
+    </div>
+
+    <div class="sub-panel" id="subtab-marine">
+      <div class="gallery-grid">
+        <div class="gallery-card"><div class="gallery-thumb"><img src="boat1.jpg" alt="Marine #1" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Yatch</div><div class="meta">Private Yatch Phantom Black + VIP</div></div></div>
+        <div class="gallery-card"><div class="gallery-thumb"><img src="boat2.jpg" alt="Marine #2" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">SubMarine</div><div class="meta">Orca Submarine + VVIP</div></div></div>
+        <div class="gallery-card"><div class="gallery-thumb"><img src="boat3.jpg" alt="Marine #3" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Boat</div><div class="meta">Swan Lake + VIP</div></div></div>
+      </div>
+    </div>
+
+    <div class="sub-panel" id="subtab-moto">
+      <div class="gallery-grid">
+        <div class="gallery-card"><div class="gallery-thumb"><img src="mot1.jpg" alt="Moto #1" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Scooter</div><div class="meta">Romantic Vintage (Yellow) + VIP</div></div></div>
+        <div class="gallery-card"><div class="gallery-thumb"><img src="mot2.jpg" alt="Moto #2" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">White Bike</div><div class="meta">White Lightning + VIP</div></div></div>
+        <div class="gallery-card"><div class="gallery-thumb"><img src="mot3.jpg" alt="Moto #3" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Red Bike</div><div class="meta">Cybercity + VIP</div></div></div>
+      </div>
+    </div>
+
+    <div class="sub-panel" id="subtab-aerial">
+      <div class="gallery-grid">
+        <div class="gallery-card"><div class="gallery-thumb"><img src="air1.jpg" alt="Aerial #1" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Rocket</div><div class="meta">Fly space rocket (red & white) + VVIP</div></div></div>
+        <div class="gallery-card"><div class="gallery-thumb"><img src="air2.jpg" alt="Aerial #2" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Wings</div><div class="meta">Starbearer (Moonlight) + VVIP</div></div></div>
+        <div class="gallery-card"><div class="gallery-thumb"><img src="air3.jpg" alt="Aerial #3" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Longboard</div><div class="meta">Sky Rider Longboard + VVIP</div></div></div>
+      </div>
+    </div>
+
+    <h3 class="subsection-heading"><span class="dot-tag" style="background:var(--lilac-deep);"></span><span data-i18n="vip-heading">VIP bears</span></h3>
+    <p class="subsection-sub" data-i18n="vip-sub">Play Pass Bear Collection</p>
+    <div class="vip-carousel">
+      <button class="vip-arrow vip-arrow-prev" onclick="vipScroll(-1)" aria-label="Previous">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="vip-carousel-track" id="vipTrack">
+        <div class="vip-card is-active" onclick="openLightbox('Vip.png')"><img src="Vip.png" alt="VIP bear #1" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"><div class="vip-fallback"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M9 15c1 1 5 1 6 0"/></svg></div></div>
+        <div class="vip-card" onclick="openLightbox('Vip1.png')"><img src="Vip1.png" alt="VIP bear #2" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"><div class="vip-fallback"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M9 15c1 1 5 1 6 0"/></svg></div></div>
+        <div class="vip-card" onclick="openLightbox('Vip2.png')"><img src="Vip2.png" alt="VIP bear #3" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"><div class="vip-fallback"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M9 15c1 1 5 1 6 0"/></svg></div></div>
+        <div class="vip-card" onclick="openLightbox('Vip3.png')"><img src="Vip3.png" alt="VIP bear #4" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"><div class="vip-fallback"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M9 15c1 1 5 1 6 0"/></svg></div></div>
+        <div class="vip-card" onclick="openLightbox('Vip4.png')"><img src="Vip4.png" alt="VIP bear #5" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"><div class="vip-fallback"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M9 15c1 1 5 1 6 0"/></svg></div></div>
+        <div class="vip-card" onclick="openLightbox('Vip5.png')"><img src="Vip5.png" alt="VIP bear #6" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"><div class="vip-fallback"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M9 15c1 1 5 1 6 0"/></svg></div></div>
+        <div class="vip-card" onclick="openLightbox('Vip6.png')"><img src="Vip6.png" alt="VIP bear #7" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"><div class="vip-fallback"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M9 15c1 1 5 1 6 0"/></svg></div></div>
+        <div class="vip-card" onclick="openLightbox('Vip7.png')"><img src="Vip7.png" alt="VIP bear #8" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"><div class="vip-fallback"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M9 15c1 1 5 1 6 0"/></svg></div></div>
+        <div class="vip-card" onclick="openLightbox('Vip8.png')"><img src="Vip8.png" alt="VIP bear #9" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"><div class="vip-fallback"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M9 15c1 1 5 1 6 0"/></svg></div></div>
+        <div class="vip-card" onclick="openLightbox('Vip9.png')"><img src="Vip9.png" alt="VIP bear #10" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"><div class="vip-fallback"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M9 15c1 1 5 1 6 0"/></svg></div></div>
+        <div class="vip-card" onclick="openLightbox('Vip10.png')"><img src="Vip10.png" alt="VIP bear #11" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"><div class="vip-fallback"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M9 15c1 1 5 1 6 0"/></svg></div></div>
+        <div class="vip-card" onclick="openLightbox('Vip11.png')"><img src="Vip11.png" alt="VIP bear #12" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"><div class="vip-fallback"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M9 15c1 1 5 1 6 0"/></svg></div></div>
+        <div class="vip-card" onclick="openLightbox('Vip12.png')"><img src="Vip12.png" alt="VIP bear #13" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"><div class="vip-fallback"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M9 15c1 1 5 1 6 0"/></svg></div></div>
+        <div class="vip-card" onclick="openLightbox('Vip13.png')"><img src="Vip13.png" alt="VIP bear #14" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"><div class="vip-fallback"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M9 15c1 1 5 1 6 0"/></svg></div></div>
+        <div class="vip-card" onclick="openLightbox('Vip14.png')"><img src="Vip14.png" alt="VIP bear #15" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"><div class="vip-fallback"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M9 15c1 1 5 1 6 0"/></svg></div></div>
+        <div class="vip-card" onclick="openLightbox('Vip15.png')"><img src="Vip15.png" alt="VIP bear #16" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"><div class="vip-fallback"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M9 15c1 1 5 1 6 0"/></svg></div></div>
+        <div class="vip-card" onclick="openLightbox('Vip16.png')"><img src="Vip16.png" alt="VIP bear #16" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"><div class="vip-fallback"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M9 15c1 1 5 1 6 0"/></svg></div></div>
+      </div>
+      <button class="vip-arrow vip-arrow-next" onclick="vipScroll(1)" aria-label="Next">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ACTIVITIES ============ -->
+<section class="tab-section" id="tab-activities">
+  <div class="wrap">
+    <h2 class="section-heading" style="margin-top:56px;" data-i18n="activities-heading">Activities</h2>
+    <p class="section-sub" data-i18n="activities-sub">Drawing and cosplay — the creative side of things</p>
+
+    <div class="sub-tabs">
+      <button class="sub-tab active" data-subtab="drawing" data-i18n="nav-drawing">Drawing</button>
+      <button class="sub-tab" data-subtab="cosplay" data-i18n="nav-cosplay">Cosplay</button>
+    </div>
+
+    <div class="sub-panel active" id="subtab-drawing">
+      <div class="polaroid-grid">
+        <div class="polaroid-card" onclick="openLightbox('draw2.jpg')">
+          <div class="polaroid-photo"><img src="draw2.jpg" alt="Drawing #1" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div>
+          <div class="polaroid-caption"><div class="name">Drawing #1</div><div class="meta">Add title + date</div></div>
+        </div>
+        <div class="polaroid-card" onclick="openLightbox('draw3.jpg')">
+          <div class="polaroid-photo"><img src="draw3.jpg" alt="Drawing #2" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div>
+          <div class="polaroid-caption"><div class="name">Drawing #2</div><div class="meta">Add title + date</div></div>
+        </div>
+        <div class="polaroid-card" onclick="openLightbox('draw4.jpg')">
+          <div class="polaroid-photo"><img src="draw4.jpg" alt="Drawing #3" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div>
+          <div class="polaroid-caption"><div class="name">Drawing #3</div><div class="meta">Add title + date</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-panel" id="subtab-cosplay">
+      <div class="cosplay-backdrop">
+        <p class="cosplay-kicker"><span>✨ Character Cosplay ✨</span></p>
+        <div class="gallery-grid">
+          <div class="gallery-card"><div class="gallery-thumb"><img src="cos1.jpg" alt="Cosplay #1" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Chocolove</div><div class="meta">Shaman King</div></div></div>
+          <div class="gallery-card"><div class="gallery-thumb"><img src="cos2.jpg" alt="Cosplay #2" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Pouf</div><div class="meta">Hunter Hunter</div></div></div>
+          <div class="gallery-card"><div class="gallery-thumb"><img src="cos4.png" alt="Cosplay #3" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Danzo Shimura</div><div class="meta">Naruto & Naruto Shippuden</div></div></div>
+          <div class="gallery-card"><div class="gallery-thumb"><img src="cos3.jpg" alt="Cosplay #3" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Akaza</div><div class="meta">Demon Slayer</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NEWS ============ -->
+<section class="tab-section" id="tab-news">
+  <div class="wrap">
+    <h2 class="section-heading" style="margin-top:56px;" data-i18n="news-heading">News & Updates</h2>
+    <p class="section-sub" data-i18n="news-sub">My latest news </p>
+
+    <div class="news-list">
+      <div class="news-card tag-milestone">
+        <div class="news-date"><span class="d-num">08</span><span class="d-mon" data-i18n="news6-mon">Aug</span></div>
+        <div class="news-body">
+          <div class="news-title"><span data-i18n="news6-title">Completed all 120/120 cards</span><span class="news-tag tag-milestone" data-i18n="news-tag-milestone">Milestone</span></div>
+          <p data-i18n="news6-text">Earned the AURORAPING Wings and advanced to the next level of the card event.</p>
+        </div>
+      </div>
+      <div class="news-card tag-merge">
+        <div class="news-date"><span class="d-num">07</span><span class="d-mon" data-i18n="news7-mon">Aug</span></div>
+        <div class="news-body">
+          <div class="news-title"><span data-i18n="news7-title">Combined a Black Tortoise</span><span class="news-tag tag-merge" data-i18n="news-tag-merge">Merge</span></div>
+          <p data-i18n="news7-text">Successfully combined a new event pet and proudly added it to my home</p>
+        </div>
+      </div>
+      <div class="news-card tag-merge">
+        <div class="news-date"><span class="d-num">06</span><span class="d-mon" data-i18n="news8-mon">Aug</span></div>
+        <div class="news-body">
+          <div class="news-title"><span data-i18n="news8-title">Combined a new White Tiger pet</span><span class="news-tag tag-merge" data-i18n="news-tag-merge">Merge</span></div>
+          <p data-i18n="news8-text">Successfully combined a new event pet and proudly added it to my home</p>
+        </div>
+      </div>
+      <div class="news-card tag-gacha">
+        <div class="news-date"><span class="d-num">27</span><span class="d-mon" data-i18n="news1-mon">Jul</span></div>
+        <div class="news-body">
+          <div class="news-title"><span data-i18n="news1-title">Got the Princess Darkness Wings in just 1 draw</span><span class="news-tag tag-gacha" data-i18n="news-tag-gacha">Gacha</span></div>
+          <p data-i18n="news1-text">Pulled the Princess Darkness Wings outfit on the very first try — an incredibly lucky single draw.</p>
+        </div>
+      </div>
+      <div class="news-card tag-catch">
+        <div class="news-date"><span class="d-num">27</span><span class="d-mon" data-i18n="news2-mon">Jul</span></div>
+        <div class="news-body">
+          <div class="news-title"><span data-i18n="news2-title">Caught the Beluga Sturgeon Aurora</span><span class="news-tag tag-catch" data-i18n="news-tag-catch">Catch</span></div>
+          <p data-i18n="news2-text">Reeled in a rare Beluga Sturgeon Aurora while fishing — one of the rarest catches yet.</p>
+        </div>
+      </div>
+      <div class="news-card tag-event">
+        <div class="news-date"><span class="d-num">25</span><span class="d-mon" data-i18n="news3-mon">Jul</span></div>
+        <div class="news-body">
+          <div class="news-title"><span data-i18n="news3-title">Done the Princess Heart event</span><span class="news-tag tag-event" data-i18n="news-tag-event">Event</span></div>
+          <p data-i18n="news3-text">Completed all stages of the Princess Heart event and claimed the rewards.</p>
+        </div>
+      </div>
+      <div class="news-card tag-update">
+        <div class="news-date"><span class="d-num">18</span><span class="d-mon" data-i18n="news5-mon">Jun</span></div>
+        <div class="news-body">
+          <div class="news-title"><span data-i18n="news5-title">Page redesigned</span><span class="news-tag tag-update" data-i18n="news-tag-update">Update</span></div>
+          <p data-i18n="news5-text">Added a News tab, language switcher, and a smoother timeline so friends can follow along more easily.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="tab-section" id="tab-about">
+  <div class="wrap">
+    <div class="about" style="margin-top:56px;">
+      <div class="avatar" id="avatarWrap" onclick="openLightbox('raiwhole.jpg')">
+        <img id="avatarImg" src="raii.PNG" alt="Raijin avatar">
+        <div class="avatar-hint">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>
+        </div>
+      </div>
+      <div>
+        <span class="since" data-i18n="about-since">Playing since Feb 2021</span>
+        <span class="status-pill is-active" id="statusPill"><span class="status-dot"></span><span data-i18n="about-status">Active Player</span></span>
+        <h2 data-i18n="about-heading">Hey, I'm Raijin</h2>
+        <p data-i18n="about-text">Island builder, pet collector, and reigning #1 zombie on the Asia server. This page tracks my Play Together progress</p>
+        <div class="btn-row">
+          <a class="gh-btn" href="https://play.google.com/store/apps/details?id=com.haegin.playtogether" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="fill:none;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+            <span data-i18n="about-download-btn">Download Play Together</span>
+          </a>
+          <button class="contact-btn-inline" onclick="openContact()" data-i18n="nav-contact">Contact me</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SITEWIDE FOOTER ============ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <span class="footer-brand-logo" aria-label="Haegin">
+          <span>HAEG</span><span class="logo-i"><span class="logo-i-stem"></span><svg class="logo-sun" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="4.4" fill="#FFC857"/>
+            <g stroke="#FFC857" stroke-width="2.3" stroke-linecap="round">
+              <line x1="12" y1="1.4" x2="12" y2="4.2"/>
+              <line x1="12" y1="19.8" x2="12" y2="22.6"/>
+              <line x1="1.4" y1="12" x2="4.2" y2="12"/>
+              <line x1="19.8" y1="12" x2="22.6" y2="12"/>
+              <line x1="4.4" y1="4.4" x2="6.3" y2="6.3"/>
+              <line x1="17.7" y1="17.7" x2="19.6" y2="19.6"/>
+            </g>
+          </svg></span><span>N</span>
+        </span>
+        <p class="footer-brand-text" data-i18n="footer-brand-text">A Play Together player card for Raijin — tracking pets, ranks, and milestones on the Asia server since 2021.</p>
+      </div>
+      <div>
+        <h4 class="footer-col-title" data-i18n="footer-quicklinks">Quick links</h4>
+        <ul class="footer-links">
+          <li><button onclick="goToTab('home')" data-i18n="nav-home">Home</button></li>
+          <li><button onclick="goToTab('about')" data-i18n="nav-about">About me</button></li>
+          <li><button onclick="goToTab('news')" data-i18n="nav-news">News</button></li>
+          <li><button onclick="goToTab('derby')" data-i18n="nav-derby">Derby</button></li>
+          <li><button onclick="goToTab('collection')" data-i18n="nav-collection">Collection</button></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-col-title" data-i18n="footer-follow">Follow me here</h4>
+        <div class="footer-social">
+          <a href="https://www.tiktok.com/@raijiin_005" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24"><path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.02 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48z"/></svg></a>
+          <a href="https://www.instagram.com/raijin.pt/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2c2.72 0 3.06.01 4.12.06 1.07.05 1.79.22 2.43.46.66.26 1.22.6 1.77 1.15.55.55.89 1.11 1.15 1.77.24.64.41 1.36.46 2.43.05 1.06.06 1.4.06 4.12s-.01 3.06-.06 4.12c-.05 1.07-.22 1.79-.46 2.43a4.93 4.93 0 0 1-1.15 1.77 4.93 4.93 0 0 1-1.77 1.15c-.64.24-1.36.41-2.43.46-1.06.05-1.4.06-4.12.06s-3.06-.01-4.12-.06c-1.07-.05-1.79-.22-2.43-.46a4.93 4.93 0 0 1-1.77-1.15 4.93 4.93 0 0 1-1.15-1.77c-.24-.64-.41-1.36-.46-2.43C2.01 15.06 2 14.72 2 12s.01-3.06.06-4.12c.05-1.07.22-1.79.46-2.43.26-.66.6-1.22 1.15-1.77A4.93 4.93 0 0 1 5.44 2.53c.64-.24 1.36-.41 2.43-.46C8.94 2.01 9.28 2 12 2zm0 1.8c-2.67 0-2.99.01-4.04.06-.87.04-1.34.18-1.66.31-.42.16-.72.35-1.03.66-.31.31-.5.61-.66 1.03-.13.32-.27.79-.31 1.66-.05 1.05-.06 1.37-.06 4.04s.01 2.99.06 4.04c.04.87.18 1.34.31 1.66.16.42.35.72.66 1.03.31.31.61.5 1.03.66.32.13.79.27 1.66.31 1.05.05 1.37.06 4.04.06s2.99-.01 4.04-.06c.87-.04 1.34-.18 1.66-.31.42-.16.72-.35 1.03-.66.31-.31.5-.61.66-1.03.13-.32.27-.79.31-1.66.05-1.05.06-1.37.06-4.04s-.01-2.99-.06-4.04c-.04-.87-.18-1.34-.31-1.66a2.76 2.76 0 0 0-.66-1.03 2.76 2.76 0 0 0-1.03-.66c-.32-.13-.79-.27-1.66-.31C14.99 3.81 14.67 3.8 12 3.8zm0 3.06a5.14 5.14 0 1 1 0 10.28 5.14 5.14 0 0 1 0-10.28zm0 1.8a3.34 3.34 0 1 0 0 6.68 3.34 3.34 0 0 0 0-6.68zm5.34-1.99a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4z"/></svg></a>
+          <a href="https://www.facebook.com/profile.php?id=100089546732261" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.33-.04-1.5-.14-2.73-.14C11.29 2 9.5 3.66 9.5 6.7v2.8H7v4h2.5V22h4v-8.5z"/></svg></a>
+        </div>
+        <button class="footer-contact-mini" onclick="openContact()" data-i18n="nav-contact">Contact me</button>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span data-i18n="footer-disclaimer">Fan-made stats page for Play Together by Haegin — not affiliated with or endorsed by Haegin.</span>
+      <span data-i18n="footer-edit-note">Edit the numbers, images, and timeline text in this file to keep it up to date.</span>
+      <div class="copyright" data-i18n="footer-copyright">© 2026 Raijin. All rights reserved.</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ CONTACT MODAL ============ -->
+<div class="modal-overlay" id="contactModal" onclick="if(event.target===this) closeContact();">
+  <div class="modal">
+    <button class="modal-close" onclick="closeContact()">✕</button>
+    <h3>Get in touch</h3>
+    <p class="sub">Reach me through either of these</p>
+    <a class="contact-row" href="mailto:jeffewing.imperial@gmail.com">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div>
+      <div class="txt"><div class="lbl">Gmail</div><div class="val">jeffewing.imperial@gmail.com</div></div>
+    </a>
+    <a class="contact-row" href="tel:+639667227598">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.4 2.1L8 9.9a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.8 2.2z"/></svg></div>
+      <div class="txt"><div class="lbl">Phone</div><div class="val">0966-722-7598</div></div>
+    </a>
+    <a class="contact-row" href="https://www.tiktok.com/@raijiin_005" target="_blank" rel="noopener">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="currentColor" style="stroke:none;"><path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.02 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48z" style="fill:var(--coral-deep);"/></svg></div>
+      <div class="txt"><div class="lbl">TikTok</div><div class="val">@raijiin_005</div></div>
+    </a>
+    <a class="contact-row" href="https://www.instagram.com/raijin.pt/" target="_blank" rel="noopener">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="currentColor" style="stroke:none;"><path d="M12 2c2.72 0 3.06.01 4.12.06 1.07.05 1.79.22 2.43.46.66.26 1.22.6 1.77 1.15.55.55.89 1.11 1.15 1.77.24.64.41 1.36.46 2.43.05 1.06.06 1.4.06 4.12s-.01 3.06-.06 4.12c-.05 1.07-.22 1.79-.46 2.43a4.93 4.93 0 0 1-1.15 1.77 4.93 4.93 0 0 1-1.77 1.15c-.64.24-1.36.41-2.43.46-1.06.05-1.4.06-4.12.06s-3.06-.01-4.12-.06c-1.07-.05-1.79-.22-2.43-.46a4.93 4.93 0 0 1-1.77-1.15 4.93 4.93 0 0 1-1.15-1.77c-.24-.64-.41-1.36-.46-2.43C2.01 15.06 2 14.72 2 12s.01-3.06.06-4.12c.05-1.07.22-1.79.46-2.43.26-.66.6-1.22 1.15-1.77A4.93 4.93 0 0 1 5.44 2.53c.64-.24 1.36-.41 2.43-.46C8.94 2.01 9.28 2 12 2zm0 1.8c-2.67 0-2.99.01-4.04.06-.87.04-1.34.18-1.66.31-.42.16-.72.35-1.03.66-.31.31-.5.61-.66 1.03-.13.32-.27.79-.31 1.66-.05 1.05-.06 1.37-.06 4.04s.01 2.99.06 4.04c.04.87.18 1.34.31 1.66.16.42.35.72.66 1.03.31.31.61.5 1.03.66.32.13.79.27 1.66.31 1.05.05 1.37.06 4.04.06s2.99-.01 4.04-.06c.87-.04 1.34-.18 1.66-.31.42-.16.72-.35 1.03-.66.31-.31.5-.61.66-1.03.13-.32.27-.79.31-1.66.05-1.05.06-1.37.06-4.04s-.01-2.99-.06-4.04c-.04-.87-.18-1.34-.31-1.66a2.76 2.76 0 0 0-.66-1.03 2.76 2.76 0 0 0-1.03-.66c-.32-.13-.79-.27-1.66-.31C14.99 3.81 14.67 3.8 12 3.8zm0 3.06a5.14 5.14 0 1 1 0 10.28 5.14 5.14 0 0 1 0-10.28zm0 1.8a3.34 3.34 0 1 0 0 6.68 3.34 3.34 0 0 0 0-6.68zm5.34-1.99a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4z" style="fill:var(--coral-deep);"/></svg></div>
+      <div class="txt"><div class="lbl">Instagram</div><div class="val">@raijin.pt</div></div>
+    </a>
+    <a class="contact-row" href="https://www.facebook.com/profile.php?id=100089546732261" target="_blank" rel="noopener">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="currentColor" style="stroke:none;"><path d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.33-.04-1.5-.14-2.73-.14C11.29 2 9.5 3.66 9.5 6.7v2.8H7v4h2.5V22h4v-8.5z" style="fill:var(--coral-deep);"/></svg></div>
+      <div class="txt"><div class="lbl">Facebook</div><div class="val">Raijin</div></div>
+    </a>
+  </div>
+</div>
+
+<div class="lightbox-overlay" id="lightboxOverlay" onclick="if(event.target===this) closeLightbox();">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="Zoomed image">
+</div>
+
+<script>
+  function openLightbox(src){
+    document.getElementById('lightboxImg').src = src;
+    document.getElementById('lightboxOverlay').classList.add('open');
+  }
+  function vipScroll(dir){
+    const track = document.getElementById('vipTrack');
+    if(!track) return;
+    const card = track.querySelector('.vip-card');
+    if(!card) return;
+    const gap = parseFloat(getComputedStyle(track).columnGap || 14);
+    track.scrollBy({left:(card.offsetWidth+gap)*dir, behavior:'smooth'});
+  }
+  (function initVipCarousel(){
+    const track = document.getElementById('vipTrack');
+    if(!track) return;
+    const originalCards = [...track.querySelectorAll('.vip-card')];
+    if(!originalCards.length) return;
+    const setCount = originalCards.length;
+
+    // Clone the full set before and after the originals so scrolling
+    // in either direction always has more cards waiting — the illusion
+    // of an endless carousel.
+    function cloneSet(){
+      return originalCards.map(c => {
+        const clone = c.cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        return clone;
+      });
+    }
+    const beforeClones = cloneSet();
+    const afterClones = cloneSet();
+    beforeClones.reverse().forEach(c => track.insertBefore(c, track.firstChild));
+    afterClones.forEach(c => track.appendChild(c));
+
+    const cards = [...track.querySelectorAll('.vip-card')];
+
+    let setWidth = 0;
+    function measureSetWidth(){
+      if(cards.length <= setCount) return track.scrollWidth;
+      return cards[setCount].offsetLeft - cards[0].offsetLeft;
+    }
+
+    let ticking = false;
+    function updateActiveCard(){
+      const trackRect = track.getBoundingClientRect();
+      const trackCenter = trackRect.left + trackRect.width / 2;
+      let closest = null;
+      let closestDist = Infinity;
+      cards.forEach(c => {
+        const r = c.getBoundingClientRect();
+        const cardCenter = r.left + r.width / 2;
+        const dist = Math.abs(cardCenter - trackCenter);
+        if(dist < closestDist){
+          closestDist = dist;
+          closest = c;
+        }
+      });
+      cards.forEach(c => c.classList.toggle('is-active', c === closest));
+    }
+
+    function handleLoop(){
+      if(!setWidth) return;
+      // Once scrolled past a full set into the clones on either side,
+      // silently jump back by exactly one set width. Since the clone
+      // set is visually identical to the real one, the jump is invisible.
+      if(track.scrollLeft < setWidth){
+        track.scrollLeft += setWidth;
+      } else if(track.scrollLeft >= setWidth * 2){
+        track.scrollLeft -= setWidth;
+      }
+    }
+
+    function requestUpdate(){
+      if(!ticking){
+        ticking = true;
+        requestAnimationFrame(() => {
+          updateActiveCard();
+          handleLoop();
+          ticking = false;
+        });
+      }
+    }
+
+    track.addEventListener('scroll', requestUpdate, {passive:true});
+    window.addEventListener('resize', () => { setWidth = measureSetWidth(); });
+
+    // Wait a frame for layout (and image loads) to settle before measuring
+    // and positioning the track at the start of the real (middle) set.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setWidth = measureSetWidth();
+        track.scrollLeft = setWidth;
+        updateActiveCard();
+      });
+    });
+  })();
+  function closeLightbox(){
+    document.getElementById('lightboxOverlay').classList.remove('open');
+  }
+
+  /* ---------- TRANSLATIONS (EN / VN / TH) ---------- */
+  const translations = {
+    en: {
+      'nav-home':'Home','nav-about':'About me','nav-news':'News','nav-derby':'Derby','nav-collection':'Collection','nav-activities':'Activities','nav-drawing':'Drawing','nav-cosplay':'Cosplay','nav-contact':'Contact me',
+      'nav-auto':'Auto','nav-marine':'Marine','nav-moto':'Moto','nav-aerial':'Aerial',
+      'hero-eyebrow':'Play Together • Player card','hero-tag':'Collecting pets on the island since Feb 2021',
+      'profile-level-chip':'Lv. 26','profile-pill-server':'Asia Server','profile-pill-rank':'#1 Zombie Rank','profile-pill-since':'Since 2021',
+      'badge-title':'#1 Zombie — Asia server','badge-sub':'Top ranked',
+      'level-label':'Level 26','level-xp':'25 / 30 XP to Level 27',
+      'stats-heading':'My Play Together stats','stats-sub':'Numbers updated every week',
+      'stat-combined':'Combined pets','stat-total-pets':'Total pets','stat-vip-bears':'VIP bears','stat-total-fishes':'Total fishes','stat-years':'Years playing','stat-total-insects':'Total insects',
+      'milestone-heading':'My Milestone','milestone-sub':'The road to #1 — replace each thumbnail with a real screenshot when ready',
+      'rank1-name':'Caught My First Blue Whale','rank1-note':'A memorable milestone that marked my biggest fishing achievements.',
+      'rank2-name':'Purchased My Dream Car – Rolls-Royce','rank2-note':'Achieved this personal goal on November 01, 2022',
+      'rank3-name':'Reached 4,000 Points & Earned the Purple Badge','rank3-note':'Achieved by playing zombie virus frequently to get crowned coins',
+      'rank4-name':'Reached Level 26 – First Player in Asia','rank4-note':'Completed the newly released Level 26 within 24 hours, becoming the first player in Asia to achieve this milestone.',
+      'rank5-name':'Defending the #1 Rank in Asia (2021 – Present)','rank5-note':'Maintained the top position in Asia through consistent performance and commitment since 2021.','rank5-tag':"You're here",
+      'video-heading':'4,000 Badge Celebration','video-sub':'Replace the file below with your own celebration clip','video-caption':'Hitting 4,000 points & earning the Purple Badge 🏆',
+      'derby-home-heading':'My Derby Plaques','derby-home-sub':'Best derby moment — swap in your screenshot',
+      'trophy-name':'Derby champion moment','trophy-meta':'Add the placement, date, and horse name here',
+      'zombie-heading':'My Zombie Virus journey','zombie-sub':'A timeline of milestones behind my #1 Zombie Rank in Asia.',
+      'tl2021':'Began my Play Together journey and quickly rose to the top, earning the Top1 Zombie Rank - Oct 29, 2021',
+      'tl2022':"Closed the year with 19,000 Zombie Wins, strengthening my position as Asia's Top1 player",
+      'tl2023':'Continued dominating the rankings by reaching 26,000 Zombie Wins while defending the #1 spot',
+      'tl2024':'Earned 28,000 Zombie Wins while holding the Philippine flag during the viral "Piliin Mo ang Pilipinas" trend',
+      'tl2025':'Kept climbing until I reached 29,000 Wins before the year ended',
+      'tl2026':'Reached 30,000 Zombie Wins on the Asia server — currently defending the Rank 1 spot. Retirement is near',
+      'footer-disclaimer':'Fan-made stats page for Play Together by Haegin — not affiliated with or endorsed by Haegin.',
+      'footer-edit-note':'Edit the numbers, images, and timeline text in this file to keep it up to date.','footer-copyright':'© 2026 Raijin. All rights reserved.',
+      'footer-brand-text':'A Play Together player card for Raijin — tracking pets, ranks, and milestones on the Asia server since 2021.',
+      'footer-quicklinks':'Quick links','footer-follow':'Follow along',
+      'derby-heading':'Derby','derby-sub':'My derby wins and best runs',
+      'collection-heading':'Collection','collection-sub':"Everything I've collected on the KAIA island so far",
+      'pets-heading':'Pets','pets-sub':'956 total, 167 combined ',
+      'fishes-heading':'Fishes','fishes-sub':'',
+      'cars-heading':'Cars','cars-sub':'Garage lineup — screenshots coming soon',
+      'vip-heading':'VIP bears','vip-sub':'Screenshots coming soon',
+      'activities-heading':'Activities','activities-sub':'Drawing and cosplay — the creative side of things',
+      'about-since':'Playing since Feb 2021','about-status':'Active Player','about-heading':"Hey, I'm Raijin",
+      'about-text':'Island builder, pet collector, and reigning #1 zombie on the Asia server. This page tracks my Play Together progress — screenshots going up soon.',
+      'about-download-btn':'Download Play Together',
+      'news-heading':'News & Updates','news-sub':'The latest from my island — edit these anytime',
+      'news6-mon':'Aug','news6-title':'Completed the full card collection — 120/120!','news6-text':'Filled the very last slot in my collection card, hitting a perfect 120 out of 120.',
+      'news7-mon':'Aug','news7-title':'Combined a new Turtle pet','news7-text':'Bred a new Turtle pet by combining two pets in the nursery.',
+      'news8-mon':'Aug','news8-title':'Combined a new White Tiger pet','news8-text':'Bred a new White Tiger pet — added to the collection this week.',
+      'news1-mon':'Jul','news1-title':'Got the Princess Darkness Wings in just 1 draw','news1-text':'Pulled the Princess Darkness Wings outfit on the very first try — an incredibly lucky single draw.',
+      'news2-mon':'Jul','news2-title':'Caught the Beluga Sturgeon Aurora','news2-text':'Reeled in a rare Beluga Sturgeon Aurora while fishing — one of the rarest catches yet.',
+      'news3-mon':'Jul','news3-title':'Done the Princess Heart event','news3-text':'Completed all stages of the Princess Heart event and claimed the rewards.',
+      'news5-mon':'Jun','news5-title':'Page redesigned','news5-text':'Added a News tab, language switcher, and a smoother timeline so friends can follow along more easily.',
+      'news-tag-milestone':'Milestone','news-tag-update':'Update','news-tag-derby':'Derby','news-tag-gacha':'Gacha','news-tag-catch':'Catch','news-tag-event':'Event','news-tag-merge':'Merge'
+    },
+    vi: {
+      'nav-home':'Trang chủ','nav-about':'Giới thiệu','nav-news':'Tin tức','nav-derby':'Đua ngựa','nav-collection':'Bộ sưu tập','nav-activities':'Hoạt động','nav-drawing':'Vẽ tranh','nav-cosplay':'Cosplay','nav-contact':'Liên hệ',
+      'nav-auto':'Ô tô','nav-marine':'Tàu thuyền','nav-moto':'Mô tô','nav-aerial':'Máy bay',
+      'hero-eyebrow':'Play Together • Thẻ người chơi','hero-tag':'Sưu tầm thú cưng trên đảo từ tháng 2/2021',
+      'profile-level-chip':'Cấp 26','profile-pill-server':'Máy chủ Châu Á','profile-pill-rank':'Hạng #1 Zombie','profile-pill-since':'Từ năm 2021',
+      'badge-title':'#1 Zombie — Máy chủ Châu Á','badge-sub':'Hạng cao nhất',
+      'level-label':'Cấp 26','level-xp':'25 / 30 XP để lên Cấp 27',
+      'stats-heading':'Thống kê Play Together của tôi','stats-sub':'Số liệu cập nhật mỗi tuần',
+      'stat-combined':'Thú cưng kết hợp','stat-total-pets':'Tổng số thú cưng','stat-vip-bears':'Gấu VIP','stat-total-fishes':'Tổng số cá','stat-years':'Số năm chơi','stat-total-insects':'Tổng số côn trùng',
+      'milestone-heading':'Cột mốc của tôi','milestone-sub':'Con đường lên hạng #1 — thay từng ảnh bằng ảnh chụp màn hình thật khi sẵn sàng',
+      'rank1-name':'Bắt được cá voi xanh đầu tiên','rank1-note':'Một cột mốc đáng nhớ đánh dấu thành tích câu cá lớn nhất của tôi.',
+      'rank2-name':'Mua được chiếc xe mơ ước – Rolls-Royce','rank2-note':'Đạt được mục tiêu cá nhân này vào ngày 01/11/2022',
+      'rank3-name':'Đạt 4.000 điểm & nhận Huy hiệu Tím','rank3-note':'Đạt được nhờ chơi Zombie Virus thường xuyên để kiếm xu vương miện',
+      'rank4-name':'Đạt Cấp 26 – Người chơi đầu tiên tại Châu Á','rank4-note':'Hoàn thành Cấp 26 mới ra mắt trong vòng 24 giờ, trở thành người chơi đầu tiên ở Châu Á đạt được cột mốc này.',
+      'rank5-name':'Bảo vệ hạng #1 tại Châu Á (2021 – Hiện tại)','rank5-note':'Duy trì vị trí dẫn đầu tại Châu Á nhờ phong độ ổn định và sự kiên trì kể từ năm 2021.','rank5-tag':'Bạn đang ở đây',
+      'video-heading':'Kỷ niệm Huy hiệu 4.000','video-sub':'Thay video bên dưới bằng clip ăn mừng của riêng bạn','video-caption':'Đạt 4.000 điểm & nhận Huy hiệu Tím 🏆',
+      'derby-home-heading':'Bảng vàng đua ngựa của tôi','derby-home-sub':'Khoảnh khắc đua ngựa đẹp nhất — thay bằng ảnh chụp màn hình của bạn',
+      'trophy-name':'Khoảnh khắc vô địch đua ngựa','trophy-meta':'Thêm thứ hạng, ngày tháng và tên ngựa tại đây',
+      'zombie-heading':'Hành trình Zombie Virus của tôi','zombie-sub':'Dòng thời gian các cột mốc đằng sau hạng #1 Zombie tại Châu Á của tôi.',
+      'tl2021':'Bắt đầu hành trình Play Together và nhanh chóng vươn lên top, giành hạng Top1 Zombie - 29/10/2021',
+      'tl2022':'Kết thúc năm với 19.000 lượt thắng Zombie, củng cố vị trí Top1 tại Châu Á',
+      'tl2023':'Tiếp tục thống trị bảng xếp hạng khi đạt 26.000 lượt thắng Zombie trong khi bảo vệ vị trí #1',
+      'tl2024':'Đạt 28.000 lượt thắng Zombie khi cầm cờ Philippines theo trào lưu viral "Piliin Mo ang Pilipinas"',
+      'tl2025':'Tiếp tục leo hạng cho đến khi đạt 29.000 lượt thắng trước khi năm kết thúc',
+      'tl2026':'Đạt 30.000 lượt thắng Zombie trên máy chủ Châu Á — hiện đang bảo vệ vị trí Hạng 1. Sắp đến lúc nghỉ hưu',
+      'footer-disclaimer':'Trang thống kê fan-made cho Play Together của Haegin — không liên kết hay được Haegin xác nhận.',
+      'footer-edit-note':'Chỉnh sửa số liệu, hình ảnh và nội dung dòng thời gian trong file này để cập nhật.','footer-copyright':'© 2026 Raijin. Đã đăng ký bản quyền.',
+      'footer-brand-text':'Thẻ người chơi Play Together của Raijin — theo dõi thú cưng, thứ hạng và cột mốc trên máy chủ Châu Á từ năm 2021.',
+      'footer-quicklinks':'Liên kết nhanh','footer-follow':'Theo dõi tại',
+      'derby-heading':'Đua ngựa','derby-sub':'Các chiến thắng đua ngựa và những lượt chạy hay nhất của tôi',
+      'collection-heading':'Bộ sưu tập','collection-sub':'Mọi thứ tôi đã sưu tầm được trên đảo KAIA cho đến nay',
+      'pets-heading':'Thú cưng','pets-sub':'956 tổng cộng, 167 kết hợp — ảnh chụp màn hình sắp có',
+      'fishes-heading':'Cá','fishes-sub':'Ảnh chụp màn hình sắp có',
+      'cars-heading':'Xe hơi','cars-sub':'Bộ sưu tập garage — ảnh chụp màn hình sắp có',
+      'vip-heading':'Gấu VIP','vip-sub':'Ảnh chụp màn hình sắp có',
+      'activities-heading':'Hoạt động','activities-sub':'Vẽ tranh và cosplay — khía cạnh sáng tạo',
+      'about-since':'Chơi từ tháng 2/2021','about-status':'Người chơi đang hoạt động','about-heading':'Xin chào, tôi là Raijin',
+      'about-text':'Người xây đảo, sưu tầm thú cưng, và đang giữ hạng #1 Zombie tại máy chủ Châu Á. Trang này theo dõi tiến trình Play Together của tôi — ảnh chụp màn hình sẽ sớm được cập nhật.',
+      'about-download-btn':'Tải Play Together',
+      'news-heading':'Tin tức & Cập nhật','news-sub':'Những tin mới nhất từ hòn đảo của tôi — chỉnh sửa bất cứ lúc nào',
+      'news6-mon':'Th8','news6-title':'Hoàn thành bộ sưu tập đầy đủ — 120/120!','news6-text':'Lấp đầy ô cuối cùng trong thẻ bộ sưu tập, đạt đủ 120/120 hoàn hảo.',
+      'news7-mon':'Th8','news7-title':'Lai tạo được thú cưng Rùa mới','news7-text':'Lai ghép hai thú cưng để tạo ra một chú Rùa mới trong khu ấp trứng.',
+      'news8-mon':'Th8','news8-title':'Lai tạo được thú cưng Hổ Trắng mới','news8-text':'Lai tạo được một chú Hổ Trắng mới — thêm vào bộ sưu tập tuần này.',
+      'news1-mon':'Th7','news1-title':'Nhận được Princess Darkness Wings chỉ trong 1 lượt quay','news1-text':'Quay trúng trang phục Princess Darkness Wings ngay lần đầu tiên — một lượt quay đơn cực kỳ may mắn.',
+      'news2-mon':'Th7','news2-title':'Câu được cá Beluga Sturgeon Aurora','news2-text':'Câu được cá Beluga Sturgeon Aurora hiếm trong lúc câu cá — một trong những lần câu hiếm nhất từ trước đến nay.',
+      'news3-mon':'Th7','news3-title':'Hoàn thành sự kiện Princess Heart','news3-text':'Hoàn thành tất cả các chặng của sự kiện Princess Heart và nhận phần thưởng.',
+      'news5-mon':'Th6','news5-title':'Trang web được thiết kế lại','news5-text':'Thêm tab Tin tức, bộ chuyển đổi ngôn ngữ và dòng thời gian mượt mà hơn để bạn bè dễ theo dõi hơn.',
+      'news-tag-milestone':'Cột mốc','news-tag-update':'Cập nhật','news-tag-derby':'Đua ngựa','news-tag-gacha':'Quay thưởng','news-tag-catch':'Câu cá','news-tag-event':'Sự kiện','news-tag-merge':'Ghép'
+    },
+    th: {
+      'nav-home':'หน้าแรก','nav-about':'เกี่ยวกับฉัน','nav-news':'ข่าวสาร','nav-derby':'ดาร์บี้','nav-collection':'คอลเลกชัน','nav-activities':'กิจกรรม','nav-drawing':'วาดภาพ','nav-cosplay':'คอสเพลย์','nav-contact':'ติดต่อฉัน',
+      'nav-auto':'รถยนต์','nav-marine':'เรือ','nav-moto':'มอเตอร์ไซค์','nav-aerial':'เครื่องบิน',
+      'hero-eyebrow':'Play Together • การ์ดผู้เล่น','hero-tag':'สะสมสัตว์เลี้ยงบนเกาะตั้งแต่ก.พ. 2021',
+      'profile-level-chip':'เลเวล 26','profile-pill-server':'เซิร์ฟเวอร์เอเชีย','profile-pill-rank':'อันดับ #1 ซอมบี้','profile-pill-since':'ตั้งแต่ปี 2021',
+      'badge-title':'#1 ซอมบี้ — เซิร์ฟเวอร์เอเชีย','badge-sub':'อันดับสูงสุด',
+      'level-label':'เลเวล 26','level-xp':'25 / 30 XP สู่เลเวล 27',
+      'stats-heading':'สถิติ Play Together ของฉัน','stats-sub':'อัปเดตตัวเลขทุกสัปดาห์',
+      'stat-combined':'สัตว์เลี้ยงรวมร่าง','stat-total-pets':'สัตว์เลี้ยงทั้งหมด','stat-vip-bears':'หมี VIP','stat-total-fishes':'ปลาทั้งหมด','stat-years':'ปีที่เล่น','stat-total-insects':'แมลงทั้งหมด',
+      'milestone-heading':'เหตุการณ์สำคัญของฉัน','milestone-sub':'เส้นทางสู่อันดับ #1 — แทนที่แต่ละภาพด้วยภาพหน้าจอจริงเมื่อพร้อม',
+      'rank1-name':'จับวาฬสีน้ำเงินตัวแรกได้','rank1-note':'เหตุการณ์สำคัญที่น่าจดจำซึ่งเป็นความสำเร็จด้านการตกปลาที่ยิ่งใหญ่ที่สุดของฉัน',
+      'rank2-name':'ซื้อรถในฝัน – Rolls-Royce','rank2-note':'บรรลุเป้าหมายส่วนตัวนี้เมื่อวันที่ 1 พฤศจิกายน 2022',
+      'rank3-name':'ทำคะแนนถึง 4,000 แต้ม & ได้รับเหรียญตราสีม่วง','rank3-note':'ทำได้จากการเล่นซอมบี้ไวรัสบ่อยๆ เพื่อเก็บเหรียญมงกุฎ',
+      'rank4-name':'ถึงเลเวล 26 – ผู้เล่นคนแรกในเอเชีย','rank4-note':'ผ่านด่านเลเวล 26 ที่เพิ่งเปิดตัวภายใน 24 ชั่วโมง กลายเป็นผู้เล่นคนแรกในเอเชียที่ทำสำเร็จ',
+      'rank5-name':'ป้องกันอันดับ #1 ในเอเชีย (2021 – ปัจจุบัน)','rank5-note':'รักษาตำแหน่งอันดับหนึ่งในเอเชียด้วยผลงานที่สม่ำเสมอและความมุ่งมั่นตั้งแต่ปี 2021','rank5-tag':'คุณอยู่ที่นี่',
+      'video-heading':'ฉลองเหรียญตรา 4,000','video-sub':'แทนที่ไฟล์ด้านล่างด้วยคลิปฉลองของคุณเอง','video-caption':'ทำคะแนนถึง 4,000 แต้ม & ได้รับเหรียญตราสีม่วง 🏆',
+      'derby-home-heading':'เหรียญรางวัลดาร์บี้ของฉัน','derby-home-sub':'ช่วงเวลาดาร์บี้ที่ดีที่สุด — เปลี่ยนเป็นภาพหน้าจอของคุณ',
+      'trophy-name':'ช่วงเวลาแชมป์ดาร์บี้','trophy-meta':'เพิ่มอันดับ วันที่ และชื่อม้าที่นี่',
+      'zombie-heading':'เส้นทางซอมบี้ไวรัสของฉัน','zombie-sub':'ไทม์ไลน์เหตุการณ์สำคัญเบื้องหลังอันดับ #1 ซอมบี้ในเอเชียของฉัน',
+      'tl2021':'เริ่มต้นการเดินทางใน Play Together และไต่อันดับขึ้นสู่จุดสูงสุดอย่างรวดเร็ว คว้าอันดับ Top1 ซอมบี้ - 29 ต.ค. 2021',
+      'tl2022':'ปิดท้ายปีด้วยชัยชนะซอมบี้ 19,000 ครั้ง เสริมความแข็งแกร่งในตำแหน่ง Top1 ของเอเชีย',
+      'tl2023':'ครองอันดับต่อเนื่องด้วยชัยชนะซอมบี้ 26,000 ครั้ง พร้อมรักษาตำแหน่ง #1',
+      'tl2024':'ทำชัยชนะซอมบี้ได้ 28,000 ครั้งขณะถือธงฟิลิปปินส์ในกระแสไวรัล "Piliin Mo ang Pilipinas"',
+      'tl2025':'ไต่อันดับต่อไปจนถึง 29,000 ชัยชนะก่อนสิ้นปี',
+      'tl2026':'ทำชัยชนะซอมบี้ถึง 30,000 ครั้งบนเซิร์ฟเวอร์เอเชีย — ปัจจุบันกำลังป้องกันตำแหน่งอันดับ 1 อยู่ ใกล้ถึงเวลาเกษียณแล้ว',
+      'footer-disclaimer':'เพจสถิติที่แฟนคลับสร้างขึ้นสำหรับ Play Together โดย Haegin — ไม่ได้เกี่ยวข้องหรือได้รับการรับรองจาก Haegin',
+      'footer-edit-note':'แก้ไขตัวเลข รูปภาพ และข้อความไทม์ไลน์ในไฟล์นี้เพื่อให้ทันสมัยอยู่เสมอ','footer-copyright':'© 2026 Raijin สงวนลิขสิทธิ์',
+      'footer-brand-text':'การ์ดผู้เล่น Play Together ของ Raijin — ติดตามสัตว์เลี้ยง อันดับ และเหตุการณ์สำคัญบนเซิร์ฟเวอร์เอเชียตั้งแต่ปี 2021',
+      'footer-quicklinks':'ลิงก์ด่วน','footer-follow':'ติดตามที่',
+      'derby-heading':'ดาร์บี้','derby-sub':'ชัยชนะดาร์บี้และการวิ่งที่ดีที่สุดของฉัน',
+      'collection-heading':'คอลเลกชัน','collection-sub':'ทุกอย่างที่ฉันสะสมมาบนเกาะ KAIA จนถึงตอนนี้',
+      'pets-heading':'สัตว์เลี้ยง','pets-sub':'รวม 956 ตัว ผสมพันธุ์แล้ว 167 ตัว — ภาพหน้าจอเร็วๆ นี้',
+      'fishes-heading':'ปลา','fishes-sub':'ภาพหน้าจอเร็วๆ นี้',
+      'cars-heading':'รถยนต์','cars-sub':'คอลเลกชันโรงรถ — ภาพหน้าจอเร็วๆ นี้',
+      'vip-heading':'หมี VIP','vip-sub':'ภาพหน้าจอเร็วๆ นี้',
+      'activities-heading':'กิจกรรม','activities-sub':'วาดภาพและคอสเพลย์ — ด้านความคิดสร้างสรรค์',
+      'about-since':'เล่นตั้งแต่ก.พ. 2021','about-status':'ผู้เล่นที่ใช้งานอยู่','about-heading':'สวัสดี ฉันคือ Raijin',
+      'about-text':'นักสร้างเกาะ นักสะสมสัตว์เลี้ยง และแชมป์ซอมบี้อันดับ #1 บนเซิร์ฟเวอร์เอเชีย เพจนี้ติดตามความคืบหน้า Play Together ของฉัน — ภาพหน้าจอกำลังจะมาเร็วๆ นี้',
+      'about-download-btn':'ดาวน์โหลด Play Together',
+      'news-heading':'ข่าวสารและอัปเดต','news-sub':'ข่าวล่าสุดจากเกาะของฉัน — แก้ไขได้ตลอดเวลา',
+      'news6-mon':'ส.ค.','news6-title':'สะสมคอลเลกชันครบสมบูรณ์ — 120/120!','news6-text':'เติมช่องสุดท้ายในการ์ดคอลเลกชันจนครบสมบูรณ์ 120/120',
+      'news7-mon':'ส.ค.','news7-title':'ผสมพันธุ์ได้สัตว์เลี้ยงเต่าตัวใหม่','news7-text':'ผสมพันธุ์สัตว์เลี้ยงสองตัวจนได้เต่าตัวใหม่ในเรือนเพาะพันธุ์',
+      'news8-mon':'ส.ค.','news8-title':'ผสมพันธุ์ได้สัตว์เลี้ยงเสือขาวตัวใหม่','news8-text':'ผสมพันธุ์ได้เสือขาวตัวใหม่ — เพิ่มเข้าคอลเลกชันในสัปดาห์นี้',
+      'news1-mon':'ก.ค.','news1-title':'ได้รับ Princess Darkness Wings ในการสุ่มเพียง 1 ครั้ง','news1-text':'สุ่มได้ชุด Princess Darkness Wings ในการสุ่มครั้งแรกเลย — โชคดีสุดๆ',
+      'news2-mon':'ก.ค.','news2-title':'จับปลา Beluga Sturgeon Aurora ได้','news2-text':'ตกปลา Beluga Sturgeon Aurora ตัวหายากได้ระหว่างตกปลา — หนึ่งในการจับที่หายากที่สุด',
+      'news3-mon':'ก.ค.','news3-title':'ทำอีเวนต์ Princess Heart สำเร็จ','news3-text':'ผ่านทุกด่านของอีเวนต์ Princess Heart และรับรางวัลเรียบร้อยแล้ว',
+      'news5-mon':'มิ.ย.','news5-title':'ออกแบบเพจใหม่','news5-text':'เพิ่มแท็บข่าวสาร ตัวสลับภาษา และไทม์ไลน์ที่ลื่นไหลขึ้นเพื่อให้เพื่อนๆ ติดตามได้ง่ายขึ้น',
+      'news-tag-milestone':'เหตุการณ์สำคัญ','news-tag-update':'อัปเดต','news-tag-derby':'ดาร์บี้','news-tag-gacha':'สุ่มไอเทม','news-tag-catch':'จับปลา','news-tag-event':'อีเวนต์','news-tag-merge':'ผสมพันธุ์'
+    }
+  };
+
+  function setLang(lang){
+    const dict = translations[lang] || translations.en;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      if (dict[key] !== undefined) el.textContent = dict[key];
+    });
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+    document.documentElement.lang = lang;
+  }
+
+  const start = new Date(2021, 1, 1);
+
+  const now = new Date();
+  let years = now.getFullYear() - start.getFullYear();
+  const monthDiff = now.getMonth() - start.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < start.getDate())) years--;
+  document.getElementById('yearsPlaying').dataset.target = years;
+
+  const xpFill = document.getElementById('xpFill');
+  if (xpFill){
+    const pct = parseFloat(xpFill.dataset.percent) || 0;
+    requestAnimationFrame(() => { setTimeout(() => { xpFill.style.width = pct + '%'; }, 150); });
+  }
+
+  const avatarImg = document.getElementById('avatarImg');
+  avatarImg.addEventListener('load', () => { avatarImg.style.display = 'block'; });
+  avatarImg.addEventListener('error', () => { avatarImg.style.display = 'none'; });
+
+  function animateCount(el){
+    const target = parseInt(el.dataset.target, 10) || 0;
+    const duration = 1400;
+    const startTime = performance.now();
+    function tick(now){
+      const progress = Math.min((now - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(eased * target).toLocaleString();
+      if (progress < 1) requestAnimationFrame(tick);
+      else el.textContent = target.toLocaleString();
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function setupCounters(scope){
+    const counters = scope.querySelectorAll('.stat-number');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting){
+          animateCount(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+    counters.forEach(c => observer.observe(c));
+  }
+  setupCounters(document);
+
+  const tabs = document.querySelectorAll('.nav-tab');
+  const sections = document.querySelectorAll('.tab-section');
+  const subTabs = document.querySelectorAll('.sub-tab');
+  const subPanels = document.querySelectorAll('.sub-panel');
+
+  function goToTab(tabName){
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
+    sections.forEach(s => s.classList.toggle('active', s.id === 'tab-' + tabName));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (tabName === 'home') requestAnimationFrame(updateTimelineProgress);
+  }
+
+  /* ---------- TIMELINE ANIMATION ---------- */
+  const timelineEl = document.querySelector('.timeline');
+  let timelineProgressEl = null;
+  if (timelineEl){
+    timelineProgressEl = document.createElement('div');
+    timelineProgressEl.className = 'timeline-progress';
+    timelineEl.appendChild(timelineProgressEl);
+
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    const tlObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          tlObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.25 });
+    timelineItems.forEach((item, i) => {
+      item.style.transitionDelay = (i * 0.08) + 's';
+      tlObserver.observe(item);
+    });
+  }
+
+  function updateTimelineProgress(){
+    if (!timelineEl || !timelineProgressEl) return;
+    const rect = timelineEl.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const total = rect.height;
+    if (total <= 0) return;
+    const scrolled = Math.min(Math.max((vh * 0.6) - rect.top, 0), total);
+    const pct = (scrolled / total) * 100;
+    timelineProgressEl.style.height = pct + '%';
+  }
+  window.addEventListener('scroll', updateTimelineProgress, { passive: true });
+  window.addEventListener('resize', updateTimelineProgress);
+  updateTimelineProgress();
+
+  function goToSubTab(subName){
+    subTabs.forEach(t => t.classList.toggle('active', t.dataset.subtab === subName));
+    subPanels.forEach(p => p.classList.toggle('active', p.id === 'subtab-' + subName));
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => goToTab(tab.dataset.tab));
+  });
+
+  subTabs.forEach(st => {
+    st.addEventListener('click', () => goToSubTab(st.dataset.subtab));
+  });
+
+  document.querySelectorAll('.dropdown-link').forEach(link => {
+    link.addEventListener('click', () => {
+      goToTab(link.dataset.tab);
+      goToSubTab(link.dataset.subtab);
+    });
+  });
+
+  function openContact(){ document.getElementById('contactModal').classList.add('open'); }
+  function closeContact(){ document.getElementById('contactModal').classList.remove('open'); }
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape'){ closeContact(); closeLightbox(); } });
+</script>
+
+</body>
+</html>
 
