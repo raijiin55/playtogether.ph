@@ -980,9 +980,9 @@
     <h3 class="subsection-heading"><span class="dot-tag" style="background:var(--coral-deep);"></span><span data-i18n="pets-heading">Pets</span></h3>
     <p class="subsection-sub" data-i18n="pets-sub">956 total, 167 combined</p>
     <div class="gallery-grid">
-      <div class="gallery-card"><div class="gallery-thumb full-photo"><img src="pet-1.jpg" alt="Pet #1" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Pet #1</div><div class="meta">Add name + rarity</div></div></div>
-      <div class="gallery-card"><div class="gallery-thumb full-photo"><img src="pet-2.jpg" alt="Pet #2" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Pet #2</div><div class="meta">Add name + rarity</div></div></div>
-      <div class="gallery-card"><div class="gallery-thumb full-photo"><img src="pet-3.jpg" alt="Pet #3" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Pet #3</div><div class="meta">Add name + rarity</div></div></div>
+      <div class="gallery-card"><div class="gallery-thumb full-photo"><img src="pet1.jpg" alt="Pet #1" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Legend Derby Donkey</div><div class="meta">Donkey (Merge) + VVIP</div></div></div>
+      <div class="gallery-card"><div class="gallery-thumb full-photo"><img src="pet2.jpg" alt="Pet #2" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Mithra</div><div class="meta">Dragon (Merge) + VVIP</div></div></div>
+      <div class="gallery-card"><div class="gallery-thumb full-photo"><img src="pet3.jpg" alt="Pet #3" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div><div class="gallery-caption"><div class="name">Zombie Mutt</div><div class="meta">Dog (Merge) + VVIP</div></div></div>
     </div>
 
     <h3 class="subsection-heading"><span class="dot-tag" style="background:var(--sun-deep);"></span><span data-i18n="fishes-heading">Fishes</span></h3>
@@ -1081,16 +1081,16 @@
     <div class="sub-panel active" id="subtab-drawing">
       <div class="polaroid-grid">
         <div class="polaroid-card" onclick="openLightbox('draw2.jpg')">
-          <div class="polaroid-photo"><img src="draw2.jpg" alt="Drawing #1" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div>
-          <div class="polaroid-caption"><div class="name">Drawing #1</div><div class="meta">Add title + date</div></div>
+          <div class="polaroid-photo"><img src="draw2.jpg" alt="Top1 Zombie Asia and Top1 Zombie East Asia" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div>
+          <div class="polaroid-caption"><div class="name">Top1 Zombie Asia and Top1 Zombie East Asia</div><div class="meta"></div></div>
         </div>
         <div class="polaroid-card" onclick="openLightbox('draw3.jpg')">
-          <div class="polaroid-photo"><img src="draw3.jpg" alt="Drawing #2" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div>
-          <div class="polaroid-caption"><div class="name">Drawing #2</div><div class="meta">Add title + date</div></div>
+          <div class="polaroid-photo"><img src="draw3.jpg" alt="Purple outfit with alpaca combine pet" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div>
+          <div class="polaroid-caption"><div class="name">Purple outfit with alpaca combine pet</div><div class="meta"></div></div>
         </div>
         <div class="polaroid-card" onclick="openLightbox('draw4.jpg')">
-          <div class="polaroid-photo"><img src="draw4.jpg" alt="Drawing #3" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div>
-          <div class="polaroid-caption"><div class="name">Drawing #3</div><div class="meta">Add title + date</div></div>
+          <div class="polaroid-photo"><img src="draw4.jpg" alt="My birthday" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';"></div>
+          <div class="polaroid-caption"><div class="name">My birthday</div><div class="meta"></div></div>
         </div>
       </div>
     </div>
@@ -1109,22 +1109,22 @@
           <div class="cosplay-video-card">
             <div class="cv-media" onclick="playCosplayVideo(this)">
               <video preload="metadata" playsinline poster="cosvid1-poster.jpg">
+                <source src="cosvid.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <button class="cv-play-btn" aria-label="Play video" onclick="event.stopPropagation(); playCosplayVideo(this.parentElement);">▶</button>
+            </div>
+            <div class="cosplay-video-caption"><div class="name">Naruto</div><div class="meta">Team Akatsuki Gathered in my home</div></div>
+          </div>
+          <div class="cosplay-video-card">
+            <div class="cv-media" onclick="playCosplayVideo(this)">
+              <video preload="metadata" playsinline poster="cosvid2-poster.jpg">
                 <source src="cosvid1.mp4" type="video/mp4">
                 Your browser does not support the video tag.
               </video>
               <button class="cv-play-btn" aria-label="Play video" onclick="event.stopPropagation(); playCosplayVideo(this.parentElement);">▶</button>
             </div>
-            <div class="cosplay-video-caption"><div class="name">Cosplay Video #1</div><div class="meta">Add title + date</div></div>
-          </div>
-          <div class="cosplay-video-card">
-            <div class="cv-media" onclick="playCosplayVideo(this)">
-              <video preload="metadata" playsinline poster="cosvid2-poster.jpg">
-                <source src="cosvid2.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-              <button class="cv-play-btn" aria-label="Play video" onclick="event.stopPropagation(); playCosplayVideo(this.parentElement);">▶</button>
-            </div>
-            <div class="cosplay-video-caption"><div class="name">Cosplay Video #2</div><div class="meta">Add title + date</div></div>
+            <div class="cosplay-video-caption"><div class="name">Bleach</div><div class="meta">Mayuri released his Bankai</div></div>
           </div>
         </div>
       </div>
