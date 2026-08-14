@@ -87,8 +87,10 @@
     padding-top:10px;
     opacity:0;pointer-events:none;transition:opacity .18s ease, transform .18s ease;z-index:20;
   }
-  .nav-item-dropdown:hover .dropdown-menu{
-    opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0);
+  @media(min-width:861px){
+    .nav-item-dropdown:hover .dropdown-menu{
+      opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0);
+    }
   }
   .dropdown-menu-inner{
     min-width:170px;background:var(--card);border-radius:18px;padding:8px;
@@ -102,6 +104,7 @@
   }
   .dropdown-link svg{width:17px;height:17px;flex-shrink:0;color:var(--coral-deep);}
   .dropdown-link:hover{background:var(--mint);}
+  .nav-tab-chevron{display:none;width:15px;height:15px;flex-shrink:0;color:var(--muted);transition:transform .22s ease;}
   .contact-btn{font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;background:var(--coral);color:#fff;border:none;cursor:pointer;padding:9px 18px;border-radius:999px;flex-shrink:0;transition:transform .2s ease,box-shadow .2s ease;box-shadow:0 4px 12px rgba(255,140,122,.35);}
   .contact-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(255,140,122,.5);}
   .contact-btn:hover{transform:translateY(-2px);}
@@ -127,10 +130,17 @@
     .nav-tab{width:100%;text-align:left;padding:12px 14px;border-radius:12px;font-size:15px;}
     .nav-tab.active::after{display:none;}
     .nav-item-dropdown{width:100%;}
-    .nav-item-dropdown > .nav-tab{pointer-events:auto;}
+    .nav-item-dropdown > .nav-tab{pointer-events:auto;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+    .nav-tab-chevron{display:inline-flex;}
+    .nav-item-dropdown.open > .nav-tab .nav-tab-chevron{transform:rotate(90deg);color:var(--plum);}
     .nav-item-dropdown .dropdown-menu{
-      position:static;transform:none;padding-top:0;margin-top:2px;
+      position:static;transform:none;padding-top:0;margin-top:0;
       opacity:1;pointer-events:auto;
+      max-height:0;overflow:hidden;
+      transition:max-height .3s ease, margin-top .3s ease;
+    }
+    .nav-item-dropdown.open .dropdown-menu{
+      max-height:220px;margin-top:2px;
     }
     .dropdown-menu-inner{
       box-shadow:none;background:rgba(207,243,224,.4);padding:6px 6px 6px 14px;
@@ -726,7 +736,10 @@
       <button class="nav-tab" data-tab="derby" data-i18n="nav-derby">Derby</button>
       <button class="nav-tab" data-tab="collection" data-i18n="nav-collection">Collection</button>
       <div class="nav-item-dropdown">
-        <button class="nav-tab" data-tab="activities" data-i18n="nav-activities">Activities</button>
+        <button class="nav-tab" data-tab="activities">
+          <span data-i18n="nav-activities">Activities</span>
+          <svg class="nav-tab-chevron" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7.5 4.5L13 10l-5.5 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
         <div class="dropdown-menu">
           <div class="dropdown-menu-inner">
             <button class="dropdown-link" data-tab="activities" data-subtab="drawing">
@@ -1691,6 +1704,8 @@
     if (!navEl.classList.contains('open')) return;
     navEl.classList.remove('open');
     navBurger.setAttribute('aria-expanded', 'false');
+    const dd = document.querySelector('.nav-item-dropdown');
+    if (dd) dd.classList.remove('open');
   }
   document.addEventListener('click', (e) => {
     if (navEl.classList.contains('open') && !navEl.contains(e.target)) closeMobileNav();
@@ -1803,7 +1818,16 @@
   }
 
   tabs.forEach(tab => {
-    tab.addEventListener('click', () => { goToTab(tab.dataset.tab); closeMobileNav(); });
+    const dropdownParent = tab.parentElement && tab.parentElement.classList.contains('nav-item-dropdown') ? tab.parentElement : null;
+    tab.addEventListener('click', (e) => {
+      if (dropdownParent && window.innerWidth <= 860){
+        e.preventDefault();
+        dropdownParent.classList.toggle('open');
+        return;
+      }
+      goToTab(tab.dataset.tab);
+      closeMobileNav();
+    });
   });
 
   subTabs.forEach(st => {
