@@ -42,7 +42,18 @@
 
   /* ---------- NAV ---------- */
   .nav{position:sticky;top:0;z-index:50;background:rgba(255,248,239,.9);backdrop-filter:blur(10px);border-bottom:1px solid rgba(46,36,64,.08);}
-  .nav-inner{max-width:1100px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;row-gap:10px;}
+  .nav-inner{position:relative;max-width:1100px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;row-gap:10px;}
+  .nav-links-wrap{display:contents;}
+  .nav-right{display:flex;align-items:center;gap:10px;}
+
+  /* ---------- BURGER BUTTON (mobile only) ---------- */
+  .nav-burger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:40px;height:40px;border:none;background:var(--mint);border-radius:12px;cursor:pointer;flex-shrink:0;padding:0;order:99;}
+  .nav-burger span{display:block;width:19px;height:2.5px;border-radius:2px;background:var(--mint-deep);transition:transform .25s ease, opacity .25s ease;}
+  .nav.open .nav-burger{background:var(--plum);}
+  .nav.open .nav-burger span{background:#fff;}
+  .nav.open .nav-burger span:nth-child(1){transform:translateY(7.5px) rotate(45deg);}
+  .nav.open .nav-burger span:nth-child(2){opacity:0;}
+  .nav.open .nav-burger span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg);}
   .nav-logo{display:flex;align-items:center;text-decoration:none;flex-shrink:0;}
   .nav-logo img{display:block;height:34px;width:auto;max-width:160px;object-fit:contain;}
   .nav-logo .nav-logo-fallback{display:none;}
@@ -94,6 +105,45 @@
   .contact-btn{font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;background:var(--coral);color:#fff;border:none;cursor:pointer;padding:9px 18px;border-radius:999px;flex-shrink:0;transition:transform .2s ease,box-shadow .2s ease;box-shadow:0 4px 12px rgba(255,140,122,.35);}
   .contact-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(255,140,122,.5);}
   .contact-btn:hover{transform:translateY(-2px);}
+
+  /* ---------- MOBILE NAV (burger menu) ---------- */
+  @media(max-width:860px){
+    .nav-inner{flex-wrap:nowrap;padding:12px 18px;}
+    .nav-burger{display:flex;}
+    .nav-links-wrap{
+      display:flex;flex-direction:column;align-items:stretch;gap:14px;
+      position:absolute;top:100%;left:0;right:0;
+      background:var(--cream);
+      padding:16px 18px 22px;
+      border-bottom:1px solid rgba(46,36,64,.1);
+      box-shadow:0 18px 34px rgba(46,36,64,.14);
+      max-height:0;opacity:0;pointer-events:none;overflow:hidden;
+      transition:max-height .32s ease, opacity .22s ease;
+    }
+    .nav.open .nav-links-wrap{
+      max-height:calc(100vh - 64px);opacity:1;pointer-events:auto;overflow-y:auto;
+    }
+    .nav-tabs{flex-direction:column;align-items:stretch;gap:3px;justify-content:flex-start;}
+    .nav-tab{width:100%;text-align:left;padding:12px 14px;border-radius:12px;font-size:15px;}
+    .nav-tab.active::after{display:none;}
+    .nav-item-dropdown{width:100%;}
+    .nav-item-dropdown > .nav-tab{pointer-events:auto;}
+    .nav-item-dropdown .dropdown-menu{
+      position:static;transform:none;padding-top:0;margin-top:2px;
+      opacity:1;pointer-events:auto;
+    }
+    .dropdown-menu-inner{
+      box-shadow:none;background:rgba(207,243,224,.4);padding:6px 6px 6px 14px;
+    }
+    .nav-right{flex-direction:column;align-items:stretch;gap:10px;width:100%;}
+    .lang-dropdown{width:100%;}
+    .lang-dropdown-trigger{width:100%;justify-content:space-between;padding:11px 14px;}
+    .lang-dropdown-menu{
+      position:static;transform:none;box-shadow:none;border:1px solid rgba(46,36,64,.08);
+      opacity:1;pointer-events:auto;width:100%;margin-top:4px;
+    }
+    .contact-btn{width:100%;padding:12px 18px;}
+  }
 
   /* ---------- LANGUAGE SWITCHER (dropdown) ---------- */
   .lang-dropdown{position:relative;flex-shrink:0;}
@@ -665,6 +715,10 @@
         </svg></span><span>N</span>
       </span>
     </a>
+    <button class="nav-burger" id="navBurger" onclick="toggleMobileNav()" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinksWrap">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links-wrap" id="navLinksWrap">
     <div class="nav-tabs">
       <button class="nav-tab active" data-tab="home" data-i18n="nav-home">Home</button>
       <button class="nav-tab" data-tab="about" data-i18n="nav-about">About me</button>
@@ -687,7 +741,7 @@
         </div>
       </div>
     </div>
-    <div style="display:flex;align-items:center;gap:10px;">
+    <div class="nav-right">
       <div class="lang-dropdown" id="langDropdown">
         <button class="lang-dropdown-trigger" onclick="toggleLangDropdown()" aria-haspopup="listbox" aria-expanded="false" id="langDropdownTrigger">
           <span id="langDropdownLabel" style="display:flex;align-items:center;gap:6px;">
@@ -724,6 +778,7 @@
         </div>
       </div>
       <button class="contact-btn" onclick="openContact()" data-i18n="nav-contact">Contact me</button>
+    </div>
     </div>
   </div>
 </div>
@@ -1625,6 +1680,23 @@
     if (dd && !dd.contains(e.target)) closeLangDropdown();
   });
 
+  /* ---------- MOBILE NAV (burger menu) ---------- */
+  const navEl = document.querySelector('.nav');
+  const navBurger = document.getElementById('navBurger');
+  function toggleMobileNav(){
+    const isOpen = navEl.classList.toggle('open');
+    navBurger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+  function closeMobileNav(){
+    if (!navEl.classList.contains('open')) return;
+    navEl.classList.remove('open');
+    navBurger.setAttribute('aria-expanded', 'false');
+  }
+  document.addEventListener('click', (e) => {
+    if (navEl.classList.contains('open') && !navEl.contains(e.target)) closeMobileNav();
+  });
+  window.addEventListener('resize', () => { if (window.innerWidth > 860) closeMobileNav(); });
+
   const start = new Date(2021, 1, 1);
 
   const now = new Date();
@@ -1731,7 +1803,7 @@
   }
 
   tabs.forEach(tab => {
-    tab.addEventListener('click', () => goToTab(tab.dataset.tab));
+    tab.addEventListener('click', () => { goToTab(tab.dataset.tab); closeMobileNav(); });
   });
 
   subTabs.forEach(st => {
@@ -1744,6 +1816,7 @@
       goToTab(link.dataset.tab);
       const targetSection = document.getElementById('tab-' + link.dataset.tab);
       goToSubTab(link.dataset.subtab, targetSection || document);
+      closeMobileNav();
     });
   });
 
@@ -1770,9 +1843,9 @@
     setTimeout(() => { valEl.textContent = original; }, 1200);
   }
 
-  function openContact(){ document.getElementById('contactModal').classList.add('open'); }
+  function openContact(){ document.getElementById('contactModal').classList.add('open'); closeMobileNav(); }
   function closeContact(){ document.getElementById('contactModal').classList.remove('open'); }
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape'){ closeContact(); closeLightbox(); } });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape'){ closeContact(); closeLightbox(); closeMobileNav(); } });
 </script>
 
 </body>
