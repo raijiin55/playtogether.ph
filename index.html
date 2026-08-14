@@ -9,7 +9,7 @@
 <link rel="apple-touch-icon" href="haegin-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root{
     --cream:#FFF8EF;
@@ -34,7 +34,7 @@
   body{
     margin:0;
     background:linear-gradient(180deg,var(--cream) 0%,#FDF3FF 60%,var(--cream) 100%);
-    font-family:'Nunito',sans-serif;
+    font-family:'Nunito Sans',sans-serif;
     color:var(--plum);
     overflow-x:hidden;
   }
@@ -56,24 +56,8 @@
   .nav.open .nav-burger span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg);}
   .nav-logo{display:flex;align-items:center;text-decoration:none;flex-shrink:0;}
   .nav-logo img{display:block;height:34px;width:auto;max-width:160px;object-fit:contain;}
-  .nav-logo .nav-logo-fallback{display:none;}
-  .logo-word{
-    align-items:flex-end;position:relative;
-    font-family:'Baloo 2',cursive;font-weight:800;font-size:23px;letter-spacing:.01em;
-    color:#1274D8;line-height:1;
-    padding-bottom:5px;
-    background-image:linear-gradient(#1274D8,#1274D8);
-    background-repeat:no-repeat;
-    background-position:0 100%;
-    background-size:100% 3px;
-    transition:transform .2s ease;
-  }
-  .nav-logo:hover .logo-word{transform:translateY(-1px);}
-  .logo-i{position:relative;display:inline-flex;align-items:flex-end;justify-content:center;width:9px;height:1em;margin:0 1px;}
-  .logo-i-stem{width:5px;height:76%;background:currentColor;border-radius:2px;}
-  .logo-sun{position:absolute;top:-11px;left:50%;transform:translateX(-50%);width:14px;height:14px;overflow:visible;}
   .nav-tabs{display:flex;gap:2px;flex-wrap:wrap;justify-content:center;}
-  .nav-tab{position:relative;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;color:var(--muted);background:none;border:none;cursor:pointer;padding:8px 11px;border-radius:999px;transition:all .2s ease;white-space:nowrap;}
+  .nav-tab{position:relative;font-family:'Nunito Sans',sans-serif;font-weight:800;font-size:14px;color:var(--muted);background:none;border:none;cursor:pointer;padding:8px 11px;border-radius:999px;transition:all .2s ease;white-space:nowrap;}
   .nav-tab:hover{background:var(--mint);color:var(--mint-deep);}
   .nav-tab.active{background:var(--plum);color:#fff;box-shadow:0 4px 14px rgba(46,36,64,.3), 0 0 0 1px rgba(255,200,87,.4);}
   .nav-tab.active::after{content:'';position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--sun);box-shadow:0 0 8px 2px rgba(255,183,3,.7);}
@@ -99,13 +83,13 @@
   }
   .dropdown-link{
     display:flex;align-items:center;gap:10px;width:100%;text-align:left;
-    font-family:'Nunito',sans-serif;font-weight:800;font-size:13.5px;color:var(--plum);
+    font-family:'Nunito Sans',sans-serif;font-weight:800;font-size:13.5px;color:var(--plum);
     background:none;border:none;cursor:pointer;padding:10px 12px;border-radius:12px;transition:background .15s ease;
   }
   .dropdown-link svg{width:17px;height:17px;flex-shrink:0;color:var(--coral-deep);}
   .dropdown-link:hover{background:var(--mint);}
   .nav-tab-chevron{display:none;width:15px;height:15px;flex-shrink:0;color:var(--muted);transition:transform .22s ease;}
-  .contact-btn{font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;background:var(--coral);color:#fff;border:none;cursor:pointer;padding:9px 18px;border-radius:999px;flex-shrink:0;transition:transform .2s ease,box-shadow .2s ease;box-shadow:0 4px 12px rgba(255,140,122,.35);}
+  .contact-btn{font-family:'Nunito Sans',sans-serif;font-weight:800;font-size:14px;background:var(--coral);color:#fff;border:none;cursor:pointer;padding:9px 18px;border-radius:999px;flex-shrink:0;transition:transform .2s ease,box-shadow .2s ease;box-shadow:0 4px 12px rgba(255,140,122,.35);}
   .contact-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(255,140,122,.5);}
   .contact-btn:hover{transform:translateY(-2px);}
 
@@ -158,7 +142,7 @@
   /* ---------- LANGUAGE SWITCHER (dropdown) ---------- */
   .lang-dropdown{position:relative;flex-shrink:0;}
   .lang-dropdown-trigger{
-    display:flex;align-items:center;gap:6px;font-family:'Nunito',sans-serif;font-weight:800;font-size:12.5px;
+    display:flex;align-items:center;gap:6px;font-family:'Nunito Sans',sans-serif;font-weight:800;font-size:12.5px;
     letter-spacing:.02em;color:var(--mint-deep);background:var(--mint);border:none;cursor:pointer;
     padding:8px 12px;border-radius:999px;transition:background .2s ease;
   }
@@ -177,7 +161,7 @@
   }
   .lang-option{
     display:flex;align-items:center;gap:8px;width:100%;text-align:left;
-    font-family:'Nunito',sans-serif;font-weight:700;font-size:13.5px;color:var(--plum);
+    font-family:'Nunito Sans',sans-serif;font-weight:700;font-size:13.5px;color:var(--plum);
     background:none;border:none;cursor:pointer;padding:9px 12px;border-radius:11px;transition:background .15s ease;
   }
   .lang-option:hover{background:var(--mint);}
@@ -204,7 +188,7 @@
     box-shadow:0 0 0 1px rgba(143,246,255,.08) inset,0 0 16px rgba(46,215,255,.28);
   }
   .eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:#2ED7FF;box-shadow:0 0 8px 2px rgba(46,215,255,.9);flex-shrink:0;}
-  .hero h1{position:relative;z-index:1;font-family:'Baloo 2',cursive;font-weight:800;font-size:clamp(38px,7vw,60px);margin:0 0 10px;}
+  .hero h1{position:relative;z-index:1;font-family:'Nunito Sans',sans-serif;font-weight:800;font-size:clamp(38px,7vw,60px);margin:0 0 10px;}
   .hero p.tag{position:relative;z-index:1;font-size:16px;font-weight:700;color:#B4AFD6;margin:0;}
   .hero-avatar{position:relative;z-index:1;width:104px;height:104px;border-radius:20px;margin:6px auto 14px;overflow:hidden;border:4px solid #fff;box-shadow:0 8px 22px rgba(46,36,64,.16);cursor:zoom-in;transition:transform .2s ease, box-shadow .2s ease;background:linear-gradient(135deg,var(--mint),var(--sky));}
   .hero-avatar:hover{transform:scale(1.04);box-shadow:0 10px 26px rgba(46,36,64,.22);}
@@ -252,7 +236,7 @@
   .hud-corner.bl{bottom:12px;left:12px;border-bottom:3px solid #FF3DA6;border-left:3px solid #FF3DA6;border-radius:0 0 0 4px;}
   .hud-corner.br{bottom:12px;right:12px;border-bottom:3px solid #2ED7FF;border-right:3px solid #2ED7FF;border-radius:0 0 4px 0;}
   .profile-name{
-    position:relative;z-index:1;font-family:'Baloo 2',cursive;font-weight:800;
+    position:relative;z-index:1;font-family:'Nunito Sans',sans-serif;font-weight:800;
     font-size:clamp(32px,6vw,44px);margin:14px 0 2px;letter-spacing:.01em;
     display:flex;align-items:center;justify-content:center;gap:8px;
     color:#fff;text-shadow:0 0 18px rgba(46,215,255,.55),0 0 4px rgba(255,255,255,.4);
@@ -282,7 +266,7 @@
     position:absolute;bottom:-13px;left:50%;transform:translateX(-50%);
     clip-path:polygon(14% 0%,86% 0%,100% 50%,86% 100%,14% 100%,0% 50%);
     background:linear-gradient(135deg,#2ED7FF,#9B5CFF);color:#fff;
-    font-family:'Baloo 2',cursive;font-weight:800;font-size:12px;letter-spacing:.04em;
+    font-family:'Nunito Sans',sans-serif;font-weight:800;font-size:12px;letter-spacing:.04em;
     padding:5px 16px;white-space:nowrap;
     box-shadow:0 4px 14px rgba(46,215,255,.5);
     z-index:2;
@@ -324,14 +308,14 @@
   .badge{display:flex;align-items:center;gap:16px;background:linear-gradient(135deg,#FFE9B0,var(--sun));border:3px solid var(--gold);border-radius:999px;padding:14px 28px 14px 18px;box-shadow:0 8px 20px rgba(255,183,3,.25);max-width:100%;flex-wrap:wrap;justify-content:center;transition:transform .25s ease, box-shadow .25s ease;}
   .badge .crown{width:42px;height:42px;flex-shrink:0;}
   .badge .badge-text{min-width:0;}
-  .badge .badge-title{font-family:'Baloo 2',cursive;font-weight:700;font-size:20px;color:var(--sun-deep);line-height:1.25;overflow-wrap:break-word;}
+  .badge .badge-title{font-family:'Nunito Sans',sans-serif;font-weight:700;font-size:20px;color:var(--sun-deep);line-height:1.25;overflow-wrap:break-word;}
   .badge .badge-sub{font-size:13px;font-weight:700;color:#7A5A0E;text-transform:uppercase;letter-spacing:.04em;}
 
   /* ---------- SECTION HEADINGS ---------- */
-  .section-heading{position:relative;text-align:center;font-family:'Baloo 2',cursive;font-weight:700;font-size:26px;margin:60px 0 8px;padding-bottom:14px;}
+  .section-heading{position:relative;text-align:center;font-family:'Nunito Sans',sans-serif;font-weight:700;font-size:26px;margin:60px 0 8px;padding-bottom:14px;}
   .section-heading::after{content:'';position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:46px;height:4px;border-radius:999px;background:linear-gradient(90deg,var(--coral),var(--sun));box-shadow:0 0 10px rgba(255,140,122,.55);}
   .section-sub{text-align:center;color:var(--muted);font-weight:700;margin:0 0 36px;font-size:14px;}
-  .subsection-heading{font-family:'Baloo 2',cursive;font-weight:700;font-size:20px;margin:44px 0 4px;display:flex;align-items:center;gap:10px;}
+  .subsection-heading{font-family:'Nunito Sans',sans-serif;font-weight:700;font-size:20px;margin:44px 0 4px;display:flex;align-items:center;gap:10px;}
   .subsection-sub{color:var(--muted);font-weight:700;margin:0 0 20px;font-size:13px;}
   .dot-tag{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
 
@@ -349,13 +333,13 @@
   .ic-lilac{background:var(--lilac);} .ic-lilac svg{stroke:var(--lilac-deep);}
   .ic-sun{background:#FFF3D6;} .ic-sun svg{stroke:var(--sun-deep);}
   .ic-teal{background:#DAF3E8;} .ic-teal svg{stroke:#0F6E56;}
-  .stat-number{font-family:'Baloo 2',cursive;font-weight:800;font-size:38px;color:var(--plum);line-height:1;}
+  .stat-number{font-family:'Nunito Sans',sans-serif;font-weight:800;font-size:38px;color:var(--plum);line-height:1;}
   .stat-label{margin-top:8px;font-size:14px;font-weight:700;color:var(--muted);}
 
   /* ---------- GAME-STYLE LEVEL BAR ---------- */
   .level-bar-section{max-width:600px;margin:34px auto 0;background:linear-gradient(135deg,var(--plum),#3E3158);border-radius:24px;padding:22px 26px;color:#fff;box-shadow:0 12px 30px rgba(46,36,64,.28);position:relative;overflow:hidden;}
   .level-bar-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
-  .level-badge{display:flex;align-items:center;gap:10px;font-family:'Baloo 2',cursive;font-weight:800;font-size:17px;}
+  .level-badge{display:flex;align-items:center;gap:10px;font-family:'Nunito Sans',sans-serif;font-weight:800;font-size:17px;}
   .level-circle{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--sun));display:flex;align-items:center;justify-content:center;color:#5A3E00;font-weight:800;font-size:15px;flex-shrink:0;box-shadow:0 0 0 4px rgba(255,183,3,.22);}
   .level-xp-text{font-size:12.5px;font-weight:700;color:rgba(255,255,255,.72);}
   .xp-track{width:100%;height:16px;background:rgba(255,255,255,.14);border-radius:999px;overflow:hidden;position:relative;}
@@ -382,7 +366,7 @@
   .trophy-thumb svg{width:44px;height:44px;}
   .trophy-thumb span{font-size:13px;font-weight:800;}
   .trophy-caption{padding:20px 22px;text-align:center;}
-  .trophy-caption .name{font-family:'Baloo 2',cursive;font-weight:700;font-size:18px;}
+  .trophy-caption .name{font-family:'Nunito Sans',sans-serif;font-weight:700;font-size:18px;}
   .trophy-caption .meta{font-size:13px;color:var(--muted);font-weight:700;margin-top:4px;}
 
   /* ---------- GALLERY ---------- */
@@ -397,7 +381,7 @@
   .gallery-thumb svg{width:28px;height:28px;}
   .gallery-thumb span{font-size:11px;font-weight:800;}
   .gallery-caption{flex:1;display:flex;flex-direction:column;justify-content:center;padding:14px 16px;min-height:70px;}
-  .gallery-caption .name{font-family:'Baloo 2',cursive;font-weight:700;font-size:15px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;}
+  .gallery-caption .name{font-family:'Nunito Sans',sans-serif;font-weight:700;font-size:15px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;}
   .gallery-caption .meta{font-size:13px;color:var(--muted);font-weight:700;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 
   /* ---------- VIP BEARS CAROUSEL ---------- */
@@ -451,7 +435,7 @@
   .polaroid-photo svg{width:26px;height:26px;}
   .polaroid-photo span{font-size:11px;font-weight:800;}
   .polaroid-caption{position:absolute;bottom:12px;left:0;right:0;text-align:center;padding:0 10px;}
-  .polaroid-caption .name{font-family:'Baloo 2',cursive;font-weight:700;font-size:14.5px;color:var(--plum);}
+  .polaroid-caption .name{font-family:'Nunito Sans',sans-serif;font-weight:700;font-size:14.5px;color:var(--plum);}
   .polaroid-caption .meta{font-size:11.5px;color:var(--muted);font-weight:700;margin-top:2px;}
 
   /* ---------- MANGA BACKDROP (Cosplay) — static anime panel look, no motion ---------- */
@@ -477,7 +461,7 @@
   }
   .cosplay-kicker{position:relative;z-index:1;text-align:center;margin:0 0 26px;}
   .cosplay-kicker span{
-    display:inline-flex;align-items:center;gap:7px;font-family:'Baloo 2',cursive;font-weight:800;
+    display:inline-flex;align-items:center;gap:7px;font-family:'Nunito Sans',sans-serif;font-weight:800;
     font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--plum);
     background:#fff;border:3px solid var(--plum);
     padding:7px 18px;border-radius:999px;
@@ -524,7 +508,7 @@
 
   /* ---------- ACTIVITIES SUB-TABS ---------- */
   .sub-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
-  .sub-tab{font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;color:var(--muted);background:var(--card);border:none;cursor:pointer;padding:9px 18px;border-radius:999px;transition:all .2s ease;box-shadow:0 3px 10px rgba(46,36,64,.05);}
+  .sub-tab{font-family:'Nunito Sans',sans-serif;font-weight:800;font-size:13px;color:var(--muted);background:var(--card);border:none;cursor:pointer;padding:9px 18px;border-radius:999px;transition:all .2s ease;box-shadow:0 3px 10px rgba(46,36,64,.05);}
   .sub-tab:hover{background:var(--mint);color:var(--mint-deep);}
   .sub-tab.active{background:var(--coral);color:#fff;}
   .sub-panel{display:none;}
@@ -550,7 +534,7 @@
   .timeline-item.left::after{right:-9px;}
   .timeline-item.right::after{left:-9px;}
   .timeline-year{
-    display:inline-block;font-family:'Baloo 2',cursive;font-weight:800;font-size:22px;
+    display:inline-block;font-family:'Nunito Sans',sans-serif;font-weight:800;font-size:22px;
     color:var(--coral-deep);background:#FFE6E0;padding:3px 14px;border-radius:999px;margin-bottom:10px;
   }
   .timeline-card{
@@ -593,7 +577,7 @@
   /* ---------- ABOUT ---------- */
   .about{margin-top:20px;background:var(--card);border-radius:32px;padding:40px;display:flex;gap:32px;align-items:center;box-shadow:0 6px 24px rgba(46,36,64,.06);}
   @media(max-width:640px){.about{flex-direction:column;text-align:center;}}
-  .avatar{width:150px;height:150px;border-radius:22px;flex-shrink:0;background:linear-gradient(135deg,var(--mint),var(--sky));display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-size:60px;font-weight:700;color:var(--plum);border:5px solid #fff;box-shadow:0 6px 20px rgba(46,36,64,.15);overflow:hidden;cursor:zoom-in;position:relative;transition:transform .2s ease;}
+  .avatar{width:150px;height:150px;border-radius:22px;flex-shrink:0;background:linear-gradient(135deg,var(--mint),var(--sky));display:flex;align-items:center;justify-content:center;font-family:'Nunito Sans',sans-serif;font-size:60px;font-weight:700;color:var(--plum);border:5px solid #fff;box-shadow:0 6px 20px rgba(46,36,64,.15);overflow:hidden;cursor:zoom-in;position:relative;transition:transform .2s ease;}
   .avatar:hover{transform:scale(1.03);}
   .avatar img{width:100%;height:100%;object-fit:cover;display:none;}
   .avatar-hint{
@@ -601,7 +585,7 @@
     background:rgba(46,36,64,.55);display:flex;align-items:center;justify-content:center;
   }
   .avatar-hint svg{width:15px;height:15px;stroke:#fff;}
-  .about h2{font-family:'Baloo 2',cursive;font-size:26px;margin:0 0 6px;}
+  .about h2{font-family:'Nunito Sans',sans-serif;font-size:26px;margin:0 0 6px;}
   .about .since{display:inline-block;font-size:13px;font-weight:800;color:var(--mint-deep);background:var(--mint);padding:4px 12px;border-radius:999px;margin-bottom:12px;}
   .status-pill{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:800;padding:4px 12px 4px 10px;border-radius:999px;margin-bottom:12px;margin-left:8px;text-transform:uppercase;letter-spacing:.03em;}
   .status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
@@ -632,13 +616,12 @@
   .footer-top{display:grid;grid-template-columns:1.1fr .8fr .8fr .9fr;gap:28px;padding-bottom:34px;border-bottom:1px solid rgba(255,255,255,.12);}
   @media(max-width:900px){.footer-top{grid-template-columns:1fr 1fr;}}
   @media(max-width:720px){.footer-top{grid-template-columns:1fr;gap:30px;text-align:center;}}
-  .footer-brand-logo{display:inline-flex;align-items:flex-end;font-family:'Baloo 2',cursive;font-weight:800;font-size:22px;color:#fff;position:relative;padding-bottom:5px;background-image:linear-gradient(#FFC857,#FFC857);background-repeat:no-repeat;background-position:0 100%;background-size:100% 3px;}
-  .footer-brand-logo .logo-i-stem{background:#fff;}
+  .footer-brand-logo{display:block;height:30px;width:auto;object-fit:contain;}
   .footer-brand-text{margin:14px 0 0;font-size:13.5px;font-weight:700;line-height:1.7;color:rgba(255,255,255,.62);max-width:280px;}
   @media(max-width:720px){.footer-brand-text{margin-left:auto;margin-right:auto;}}
-  .footer-col-title{font-family:'Baloo 2',cursive;font-weight:700;font-size:15px;color:#fff;margin:0 0 16px;}
+  .footer-col-title{font-family:'Nunito Sans',sans-serif;font-weight:700;font-size:15px;color:#fff;margin:0 0 16px;}
   .footer-links{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:11px;}
-  .footer-links button{background:none;border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:13.5px;color:rgba(255,255,255,.68);padding:0;transition:color .2s ease;}
+  .footer-links button{background:none;border:none;cursor:pointer;font-family:'Nunito Sans',sans-serif;font-weight:700;font-size:13.5px;color:rgba(255,255,255,.68);padding:0;transition:color .2s ease;}
   .footer-links button:hover{color:var(--sun);}
   .footer-social{display:flex;gap:12px;flex-wrap:wrap;}
   @media(max-width:720px){.footer-social{justify-content:center;}}
@@ -654,7 +637,7 @@
   .store-badge svg{width:24px;height:24px;flex-shrink:0;}
   .store-badge .store-badge-txt{display:flex;flex-direction:column;line-height:1.2;}
   .store-badge .store-badge-txt .small{font-size:9.5px;font-weight:600;letter-spacing:.03em;color:rgba(255,255,255,.85);text-transform:uppercase;}
-  .store-badge .store-badge-txt .big{font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;color:#fff;}
+  .store-badge .store-badge-txt .big{font-size:16px;font-weight:800;font-family:'Nunito Sans',sans-serif;color:#fff;}
   .footer-bottom{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding-top:22px;font-size:12px;font-weight:700;color:rgba(255,255,255,.5);line-height:1.7;}
   .footer-bottom .copyright{font-size:11px;letter-spacing:.02em;color:rgba(255,255,255,.4);}
 
@@ -664,7 +647,7 @@
   .modal{background:#fff;border-radius:28px;padding:32px;max-width:380px;width:100%;position:relative;box-shadow:0 20px 50px rgba(46,36,64,.25);animation:popIn .25s ease;}
   @keyframes popIn{from{opacity:0;transform:scale(.92);}to{opacity:1;transform:scale(1);}}
   .modal-close{position:absolute;top:16px;right:16px;background:#FAF7F2;border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;color:var(--muted);font-weight:800;}
-  .modal h3{font-family:'Baloo 2',cursive;font-size:22px;margin:0 0 4px;}
+  .modal h3{font-family:'Nunito Sans',sans-serif;font-size:22px;margin:0 0 4px;}
   .modal p.sub{color:var(--muted);font-weight:700;font-size:14px;margin:0 0 22px;}
   .contact-row{display:flex;align-items:center;gap:14px;padding:14px;border-radius:16px;background:#FAF7F2;margin-bottom:12px;text-decoration:none;color:var(--plum);transition:background .2s ease;}
   .contact-row:hover{background:var(--mint);}
@@ -685,9 +668,9 @@
   .news-card.tag-event{border-left-color:var(--coral);}
   .news-card.tag-update{border-left-color:var(--plum);}
   .news-date{flex-shrink:0;width:64px;text-align:center;background:var(--mint);border-radius:14px;padding:8px 4px;color:var(--mint-deep);}
-  .news-date .d-num{display:block;font-family:'Baloo 2',cursive;font-weight:800;font-size:20px;line-height:1;}
+  .news-date .d-num{display:block;font-family:'Nunito Sans',sans-serif;font-weight:800;font-size:20px;line-height:1;}
   .news-date .d-mon{display:block;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
-  .news-body .news-title{font-family:'Baloo 2',cursive;font-weight:700;font-size:17px;margin-bottom:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .news-body .news-title{font-family:'Nunito Sans',sans-serif;font-weight:700;font-size:17px;margin-bottom:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
   .news-tag{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;background:var(--coral);color:#fff;padding:3px 10px;border-radius:999px;box-shadow:0 2px 6px rgba(0,0,0,.12);}
   .news-tag.tag-milestone{background:linear-gradient(135deg,var(--sun),var(--gold));color:#5A3E00;}
   .news-tag.tag-gacha{background:linear-gradient(135deg,var(--lilac-deep),#8A7CE0);color:#fff;}
@@ -710,20 +693,7 @@
 <div class="nav">
   <div class="nav-inner">
     <a class="nav-logo" href="#" onclick="return false;">
-      <img src="haegin-logo.png" alt="Haegin" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
-      <span class="nav-logo-fallback logo-word" aria-label="Haegin">
-        <span>HAEG</span><span class="logo-i"><span class="logo-i-stem"></span><svg class="logo-sun" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="4.4" fill="#FFC857"/>
-          <g stroke="#FFC857" stroke-width="2.3" stroke-linecap="round">
-            <line x1="12" y1="1.4" x2="12" y2="4.2"/>
-            <line x1="12" y1="19.8" x2="12" y2="22.6"/>
-            <line x1="1.4" y1="12" x2="4.2" y2="12"/>
-            <line x1="19.8" y1="12" x2="22.6" y2="12"/>
-            <line x1="4.4" y1="4.4" x2="6.3" y2="6.3"/>
-            <line x1="17.7" y1="17.7" x2="19.6" y2="19.6"/>
-          </g>
-        </svg></span><span>N</span>
-      </span>
+      <img src="haegin-logo.webp" alt="Haegin">
     </a>
     <button class="nav-burger" id="navBurger" onclick="toggleMobileNav()" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinksWrap">
       <span></span><span></span><span></span>
@@ -1299,19 +1269,7 @@
   <div class="footer-inner">
     <div class="footer-top">
       <div>
-        <span class="footer-brand-logo" aria-label="Haegin">
-          <span>HAEG</span><span class="logo-i"><span class="logo-i-stem"></span><svg class="logo-sun" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="4.4" fill="#FFC857"/>
-            <g stroke="#FFC857" stroke-width="2.3" stroke-linecap="round">
-              <line x1="12" y1="1.4" x2="12" y2="4.2"/>
-              <line x1="12" y1="19.8" x2="12" y2="22.6"/>
-              <line x1="1.4" y1="12" x2="4.2" y2="12"/>
-              <line x1="19.8" y1="12" x2="22.6" y2="12"/>
-              <line x1="4.4" y1="4.4" x2="6.3" y2="6.3"/>
-              <line x1="17.7" y1="17.7" x2="19.6" y2="19.6"/>
-            </g>
-          </svg></span><span>N</span>
-        </span>
+        <img class="footer-brand-logo" src="haegin-logo.webp" alt="Haegin">
         <p class="footer-brand-text" data-i18n="footer-brand-text">A Play Together player card for Raijin — tracking pets, ranks, and milestones on the Asia server since 2021.</p>
       </div>
       <div>
